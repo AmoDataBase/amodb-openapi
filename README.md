@@ -1,6 +1,18 @@
-<!-- GitHub topics: amodb, openapi, openapi-3-1, tmdb, omdb, movie-api, tv-api, postman-collection, api-specification -->
+<p align="center">
+  <a href="https://amodb.dev">
+    <img src="https://raw.githubusercontent.com/amodb-dev/.github/main/assets/lockup.png" alt="amodb" width="260">
+  </a>
+</p>
 
-# amodb-openapi
+<h1 align="center">amodb-openapi</h1>
+
+<p align="center">OpenAPI 3.1 specification of the amodb API with Postman and Insomnia collections.</p>
+
+<p align="center">
+  <a href="https://github.com/amodb-dev/amodb-openapi/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/amodb-dev/amodb-openapi/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/amodb-dev/amodb-openapi/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/amodb-dev/amodb-openapi"></a>
+  <a href="https://github.com/amodb-dev/amodb-openapi/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/amodb-dev/amodb-openapi"></a>
+</p>
 
 OpenAPI 3.1 specification of the amodb API, with ready to import Postman and Insomnia collections.
 
@@ -42,6 +54,25 @@ These TMDB routes return 404 with code 34, as does any other unknown path:
 `include_adult` is ignored. Adult titles and people are never served.
 
 The OMDb route returns errors as HTTP 200 with `{"Response":"False","Error":"..."}`. Only `r=json` is supported, any other `r` returns 400. Episodes and seasons are not offered.
+
+## Install
+
+Download `openapi.yaml`, `postman_collection.json` and `insomnia_export.json` from the [latest release](https://github.com/amodb-dev/amodb-openapi/releases), or clone the repository:
+
+```sh
+git clone https://github.com/amodb-dev/amodb-openapi
+cd amodb-openapi
+npm install
+```
+
+## Quick start
+
+Lint the spec and call the API with your key:
+
+```sh
+npm run lint
+curl -H "Authorization: Bearer $AMODB_API_KEY" "https://api.amodb.dev/3/movie/550"
+```
 
 ## Base URL and auth
 
@@ -114,6 +145,17 @@ npm run check
 ```
 
 `npm run check` lints `openapi.yaml`, then rebuilds `postman_collection.json` and `insomnia_export.json`.
+
+## Links
+
+- Website: https://amodb.dev
+- Docs: https://amodb.dev/docs
+- Pricing: https://amodb.dev/pricing
+- Status: https://amodb.dev/status
+- Issues: https://github.com/amodb-dev/amodb-openapi/issues
+- Changelog: https://github.com/amodb-dev/amodb-openapi/blob/main/CHANGELOG.md
+- Security: https://github.com/amodb-dev/amodb-openapi/blob/main/SECURITY.md
+- Organization: https://github.com/amodb-dev
 
 ## License
 

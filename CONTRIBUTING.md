@@ -18,4 +18,14 @@ Text in docs and comments: short, concrete sentences, sentence case headings, no
 
 Never commit API keys. Use environment variables and `.env` files that are ignored by git.
 
+## Releasing
+
+For maintainers.
+
+1. Run `npm run check` and commit the rebuilt collections.
+2. Update `CHANGELOG.md`.
+3. Tag the commit and push the tag: `git tag v0.2.0 && git push origin v0.2.0`.
+
+The Release workflow creates the GitHub release and attaches `openapi.yaml`, `postman_collection.json` and `insomnia_export.json`.
+
 By contributing you agree that your work is released under the MIT license of this repository.

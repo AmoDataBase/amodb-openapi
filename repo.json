@@ -1,0 +1,6 @@
+{
+  "name": "amodb-openapi",
+  "description": "OpenAPI 3.1 specification of the amodb API with Postman and Insomnia collections. TMDB v3 and OMDb compatible.",
+  "homepage": "https://amodb.dev",
+  "topics": ["amodb", "openapi", "openapi-3-1", "tmdb", "omdb", "movie-api", "tv-api", "postman-collection", "api-specification"]
+}

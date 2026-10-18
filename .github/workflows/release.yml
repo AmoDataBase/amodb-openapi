@@ -1,0 +1,30 @@
+# Creates a GitHub release with the spec and both collections attached
+# when a tag like v0.2.0 is pushed.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Check that the collections match the spec
+        run: git diff --exit-code -- postman_collection.json insomnia_export.json
+      - name: Create the GitHub release
+        run: |
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes \
+            openapi.yaml postman_collection.json insomnia_export.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

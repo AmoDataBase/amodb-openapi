@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint and collections
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lint the spec
+        run: npm run lint
+      - name: Rebuild the collections
+        run: |
+          npm run build:postman
+          npm run build:insomnia
+      - name: Check that the collections match the spec
+        run: git diff --exit-code -- postman_collection.json insomnia_export.json

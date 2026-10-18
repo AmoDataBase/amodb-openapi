@@ -79,7 +79,7 @@ info:
     url: https://amodb.dev
   license:
     name: MIT
-    url: https://github.com/netlistenany-bot/amodb-openapi/blob/main/LICENSE
+    url: https://github.com/amodb-dev/amodb-openapi/blob/main/LICENSE
 externalDocs:
   description: amodb website and pricing
   url: https://amodb.dev
