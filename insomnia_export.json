@@ -1,0 +1,5233 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-18T00:00:00.000Z",
+  "__export_source": "amodb-openapi:0.1.0",
+  "resources": [
+    {
+      "_id": "wrk_3b563829704d414c55a5c552691f4f73",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "amodb API",
+      "description": "amodb is a paid API for movie and TV metadata. It is compatible with TMDB v3 and OMDb.\n\nExisting TMDB clients work by changing the base URL to `https://api.amodb.dev/3`. Paths, query parameters and JSON shapes match the TMDB v3 read endpoints.\n\n## Access\n\namodb is a paid API. Get a key at https://amodb.dev/pricing. A key is 32 lowercase hex characters.\n\n- TMDB style routes: send `Authorization: Bearer KEY` or add `?api_key=KEY`.\n- OMDb route: add `apikey=KEY`.\n- Images and plans need no key.\n\n## Rate limits\n\nPlans differ only in requests per minute. Every plan gets all data. There is no free tier and no trial.\n\n| Plan id | Requests per minute |\n|---|---|\n| lite | 20 |\n| pro | 40 |\n| proplus | 120 |\n\nEvery keyed response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). A 429 adds `Retry-After`. Live plan names and prices come from `GET /plans`.\n\n## Languages\n\n`language` accepts TMDB tags such as `ru-RU` or `pt-BR`. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.\n\n## Errors\n\nTMDB style routes return `{\"success\": false, \"status_code\": N, \"status_message\": \"...\"}`. The OMDb route returns `{\"Response\": \"False\", \"Error\": \"...\"}`.\n\n## Write methods\n\nTMDB write methods (account, session, rating and list writes) are not offered. They return 405 with status_code 37.\n\n## Images\n\n`GET /3/configuration` returns `images.secure_base_url`, which is `https://img.amodb.dev/t/p/`. Append a size and a `file_path` to build an image URL.\n\n## Extensions\n\namodb adds `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`. Each has its own route and an `append_to_response` value. `/3/find/{external_id}` also accepts `tvdb_id`, `wikidata_id` and `kinopoisk_id`.",
+      "scope": "collection",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "env_1405df66cbe219b0bf6355bc3d60361a",
+      "_type": "environment",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Base Environment",
+      "data": {
+        "baseUrl": "https://api.amodb.dev",
+        "apiKey": "",
+        "imageBaseUrl": "https://img.amodb.dev"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "baseUrl",
+          "apiKey",
+          "imageBaseUrl"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1792281600000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Movies",
+      "description": "Movie details and the data attached to a movie.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 1000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_3181315f20ee59f683f8affffafdee01",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get movie details",
+      "description": "Returns one movie. Merge sub requests with `append_to_response`, for example `credits,images`. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+      "url": "{{ _.baseUrl }}/3/movie/550",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_8e601fa588ef9ab5c4dac4a6c079da58",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_92443fa18be890c94de2b91b60156ba9",
+          "name": "append_to_response",
+          "value": "credits,images",
+          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_078e17e1e9bf6644039e3ece48617821",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get alternative titles",
+      "description": "Titles of the movie in other countries.",
+      "url": "{{ _.baseUrl }}/3/movie/550/alternative_titles",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_00c5efab848725a51c5e7a6fdabd1467",
+          "name": "country",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows the list.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_94e452b22e6341bd8c10430ca27f86a3",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get credits",
+      "description": "Cast and crew of the movie.",
+      "url": "{{ _.baseUrl }}/3/movie/550/credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_f69d848ef4ed96e2b7abf68afc324df9",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_c17e0abe631eeb2cdf3a7550f57b9cbd",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get external ids",
+      "description": "External ids of the movie, such as the IMDb id.",
+      "url": "{{ _.baseUrl }}/3/movie/550/external_ids",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_28adbd9f715225f682fbdd8111a2f489",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get images",
+      "description": "Posters, backdrops and logos.",
+      "url": "{{ _.baseUrl }}/3/movie/550/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_c7d35841111e4d5af5edbb31e40a2769",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a5974bfe55f8052debdcc966a4a177b1",
+          "name": "include_image_language",
+          "value": "en,null",
+          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8b3b819aa157fb10a5441e22b6c39d44",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get keywords",
+      "description": "Keywords attached to the movie.",
+      "url": "{{ _.baseUrl }}/3/movie/550/keywords",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_ce11aac0c5b497937e1a138081c2dd6d",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get recommendations",
+      "description": "Movies recommended for this movie.",
+      "url": "{{ _.baseUrl }}/3/movie/550/recommendations",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_2896e47d68a6dd0074ca34b9196b3a86",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_165bb7d5686235cbbe7d4907529d3144",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_64770fa17e2a042e925c324990e71b4a",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get release dates",
+      "description": "Release dates and certifications by country.",
+      "url": "{{ _.baseUrl }}/3/movie/550/release_dates",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_6c977963c4e543006e90702cbadd421c",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get reviews",
+      "description": "User reviews of the movie.",
+      "url": "{{ _.baseUrl }}/3/movie/550/reviews",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_0d28f81541e82fc5bab11abf121f35d2",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_33198aea9efb02f0c79c6ba45b1f707e",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_4d608387da824474b555d96f0880ff66",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get similar movies",
+      "description": "Movies with similar genres and keywords.",
+      "url": "{{ _.baseUrl }}/3/movie/550/similar",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_c48443e6dac1f73154591fc690e37e7c",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e5f0a07104da65876b7e110632d734aa",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_9673512cbf786fdfb60c610cb4fec6ee",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get translations",
+      "description": "Translated titles and overviews.",
+      "url": "{{ _.baseUrl }}/3/movie/550/translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8b96258ae7f10f01d845ca4dc63f7a6c",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get videos",
+      "description": "Trailers, teasers and clips.",
+      "url": "{{ _.baseUrl }}/3/movie/550/videos",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_47776521bcbc8acfdc100a0c47eae2b2",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e3f9558fe5c8a818f6172507651633c4",
+          "name": "include_video_language",
+          "value": "en",
+          "description": "Comma separated language codes to keep, for example en,ru.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_60a9443e69b7915b1acc7a8b7aceddae",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get watch providers",
+      "description": "Where the movie can be streamed, rented or bought, by country.",
+      "url": "{{ _.baseUrl }}/3/movie/550/watch/providers",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_cb4a698df194801c2c49f8600ebe10e3",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get lists with the movie",
+      "description": "User lists that contain the movie.",
+      "url": "{{ _.baseUrl }}/3/movie/550/lists",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_1a206b04af3dbe479ee61a171f6713d6",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_5b226bfce3435034fec593932f81fbdc",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_00970ed8cdb34247c8d7dd366f037f54",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Movie lists",
+      "description": "Popular, top rated, upcoming and now playing movies.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 2000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_36711ea4ebbeb6696bf1a6ae898a846c",
+      "_type": "request",
+      "parentId": "fld_00970ed8cdb34247c8d7dd366f037f54",
+      "name": "List popular movies",
+      "description": "Movies ranked by current popularity.",
+      "url": "{{ _.baseUrl }}/3/movie/popular",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_feb9b3925b13cdf7b6ab0bee2776923b",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_d520c00176fa50b46c4de0c5f6d7f818",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_df84600d77221114da1b9144ede48906",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_1e5352a0e901132fb5c22e05fbc03bb9",
+      "_type": "request",
+      "parentId": "fld_00970ed8cdb34247c8d7dd366f037f54",
+      "name": "List top rated movies",
+      "description": "Movies ranked by vote average.",
+      "url": "{{ _.baseUrl }}/3/movie/top_rated",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_b4c0aadf1cb64c615b27725451f5c4b9",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_da44c1e6040817777c013f74b10410b1",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_64db80b30c98874f5015f622acfd4eee",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_065048ba8a1cc041e0d836e864f2b719",
+      "_type": "request",
+      "parentId": "fld_00970ed8cdb34247c8d7dd366f037f54",
+      "name": "List upcoming movies",
+      "description": "Movies with a release date in the near future.",
+      "url": "{{ _.baseUrl }}/3/movie/upcoming",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_2594ec6c5a0095039aa12f0df72db363",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_770b0da5c86c6676e3268989b0f431c7",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_fb9d8493461f61f97d462f7a4dace48c",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a3c11f4423db7be1db91b688f614130b",
+      "_type": "request",
+      "parentId": "fld_00970ed8cdb34247c8d7dd366f037f54",
+      "name": "List movies now playing",
+      "description": "Movies currently in cinemas.",
+      "url": "{{ _.baseUrl }}/3/movie/now_playing",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_d65434cba36ce6bd2a08e2403dce2b03",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_70c6b69fe273c0dfd83769b56dcb7dcb",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_378e75142e8548a9c3435c688b472f25",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "TV shows",
+      "description": "TV show details and the data attached to a show.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 3000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_782d6a9b64d2c6721b7005d86fc5f489",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get TV show details",
+      "description": "Returns one TV show. Merge sub requests with `append_to_response`, for example `aggregate_credits,images`. amodb also accepts `moods`, `soundtracks`, `ratings` and `wikidata`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_5cac827cc02cc67e818319b95d010138",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a4ccd4d88e46dc0a3be5b3e16dbce6bc",
+          "name": "append_to_response",
+          "value": "credits,images",
+          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a5dde54aff2c73261d4914427b3853d4",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get aggregate credits",
+      "description": "Cast and crew summed over all episodes.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/aggregate_credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_04bfba293aa66269c1f1d665ad786995",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_07f8befe588dd19ac4553e4f6f5ccce4",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get credits",
+      "description": "Cast and crew of the latest season.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_e95f1d38e43bfd7b7da969e7ef10e3fc",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_303d3076bba1cffa20d36470206cfda9",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get content ratings",
+      "description": "Age ratings by country.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/content_ratings",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_398bdb6043b5a933b1cd101a49194cfd",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get episode groups",
+      "description": "Alternative episode orders of the show.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/episode_groups",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_38692365c9133c7a12213089e38e5e30",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get external ids",
+      "description": "External ids of the show, such as the IMDb id.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/external_ids",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_bc8f76260f568a14fb24601543b7822f",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get images",
+      "description": "Posters, backdrops and logos.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_a87e476d725b75fb0535bed2426a5073",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_7b52ea231531278abe4bb3c8bbc13173",
+          "name": "include_image_language",
+          "value": "en,null",
+          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_20310c26c9cc6aaa4bf8ffb2659404e7",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get keywords",
+      "description": "Keywords attached to the show.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/keywords",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_5d7c7bab43f0dd6003f39ee9825b80b2",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get recommendations",
+      "description": "Shows recommended for this show.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/recommendations",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_4f8c2545b208724917b55025c9f1acec",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a077afaf151acf59a26a85b1cd7fb478",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8a794aae26094de6a636a0f76885a705",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get reviews",
+      "description": "User reviews of the show.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/reviews",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_10eab17c31ff090851c46dcc9546fd68",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_117044e9a8e75d6f602560eefdb3fd91",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_5210a4b74cf75ef477d2e567ce250d07",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get similar shows",
+      "description": "Shows with similar genres and keywords.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/similar",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_62f0eeb1ea1f24f07bd45712ecab5eda",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_27e4e46c33daed7e66947b5774128e8b",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_6a5fe3b3c39846cab6695e5efd38ac1a",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get translations",
+      "description": "Translated names and overviews.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8bc5275141efbe0a90478c48399ed224",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get videos",
+      "description": "Trailers, teasers and clips.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/videos",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_6849a3f5978366c3e3b493bee942abdf",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6e65f28db4075fc0fb6e0a3a52ff6591",
+          "name": "include_video_language",
+          "value": "en",
+          "description": "Comma separated language codes to keep, for example en,ru.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_14251edbf3062ef273cb4f9bfdc0443f",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get watch providers",
+      "description": "Where the show can be streamed, rented or bought, by country.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/watch/providers",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_054afb206af1e16b44949c6b02ca24bb",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get alternative titles",
+      "description": "Names of the show in other countries.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/alternative_titles",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_bbdcba51d3ef4692ed77811d0b6e3d70",
+      "_type": "request",
+      "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
+      "name": "Get episodes screened in cinemas",
+      "description": "Episodes that had a theatrical screening.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/screened_theatrically",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_e69043d6cf07cd566c99a404aad9bc85",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "TV lists",
+      "description": "Popular, top rated, airing today and on the air shows.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 4000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_e96aa98052607db68aba57e9aaaa1048",
+      "_type": "request",
+      "parentId": "fld_e69043d6cf07cd566c99a404aad9bc85",
+      "name": "List popular TV shows",
+      "description": "Shows ranked by current popularity.",
+      "url": "{{ _.baseUrl }}/3/tv/popular",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_50c2647267a4e5b3e6e7fa60b83f2589",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_b283fb9092dd1927cbabed0ec3845d7f",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_7adbd5c59a0674e6366e1d600985c3ea",
+      "_type": "request",
+      "parentId": "fld_e69043d6cf07cd566c99a404aad9bc85",
+      "name": "List top rated TV shows",
+      "description": "Shows ranked by vote average.",
+      "url": "{{ _.baseUrl }}/3/tv/top_rated",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_b0acf0f34288b5f6ddbf2be5184a8603",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_567db23844c77fec21c4951918194ae5",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_bc5f3f8333d48a3d6570e18aea5c3fee",
+      "_type": "request",
+      "parentId": "fld_e69043d6cf07cd566c99a404aad9bc85",
+      "name": "List shows airing today",
+      "description": "Shows with an episode on air today.",
+      "url": "{{ _.baseUrl }}/3/tv/airing_today",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_1fae9d88caac0e0d8f5505b9f5cf7356",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_f35e76032dce8ecd3140532d1a1b975c",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_cd0cef25ceafd886c9e538306682d58c",
+          "name": "timezone",
+          "value": "America/New_York",
+          "description": "IANA timezone that defines the day, for example America/New_York.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_211d4ccc902d2af984b0e96c580c4f8e",
+      "_type": "request",
+      "parentId": "fld_e69043d6cf07cd566c99a404aad9bc85",
+      "name": "List shows on the air",
+      "description": "Shows with an episode in the next 7 days.",
+      "url": "{{ _.baseUrl }}/3/tv/on_the_air",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_29500b5c24b7961c9052ad7fc5208b25",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_0ca66a045b1b10a63a9c7e2343935073",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_fb0f9a095c644c1c1bb5f8de8cbbc082",
+          "name": "timezone",
+          "value": "America/New_York",
+          "description": "IANA timezone that defines the day, for example America/New_York.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_27d882d46a3864083c06461be23a1cbd",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Seasons",
+      "description": "Season details and the data attached to a season.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 5000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_048e6b6c1a5de355f2815b220b1bf44d",
+      "_type": "request",
+      "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
+      "name": "Get season details",
+      "description": "Returns one season with its episodes. Merge sub requests with `append_to_response`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_dd5dbef082dbe94aed15151f320804d3",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_32c14224ca4e11968be3bb8204c1ae3a",
+          "name": "append_to_response",
+          "value": "credits,images",
+          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a3df62bbcc61bb16f9d2db5703d821dc",
+      "_type": "request",
+      "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
+      "name": "Get season credits",
+      "description": "Cast and crew of the season.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_9156b6fdc0ece1bc6ef91e17aeeb6b97",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_3db74efa0887b9fa6c2faae20ed84d66",
+      "_type": "request",
+      "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
+      "name": "Get season external ids",
+      "description": "External ids of the season.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/external_ids",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_f6c872078810f297a2daf446f607d987",
+      "_type": "request",
+      "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
+      "name": "Get season images",
+      "description": "Posters of the season.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_aef5a148aed4b00b1c7677cba83e722f",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_ffc02700cc42a0ab6affe20af1fff549",
+          "name": "include_image_language",
+          "value": "en,null",
+          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_9b1c1db0767162067146951489caf9c5",
+      "_type": "request",
+      "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
+      "name": "Get season videos",
+      "description": "Videos of the season.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/videos",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_f7a31fb1e0a06d40760dbb2d11f4b1d7",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_374b057282aefa2edf3d9fdde6366ee9",
+          "name": "include_video_language",
+          "value": "en",
+          "description": "Comma separated language codes to keep, for example en,ru.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_e70a5c2d5eaa8fec15b7a89c8f521115",
+      "_type": "request",
+      "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
+      "name": "Get season translations",
+      "description": "Translated names and overviews.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_49d641ba8893f2f56bfba90855388d38",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Episodes",
+      "description": "Episode details and the data attached to an episode.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 6000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_96ef523a37651c045d546e36108456fd",
+      "_type": "request",
+      "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
+      "name": "Get episode details",
+      "description": "Returns one episode. Merge sub requests with `append_to_response`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_5a21c47db4b04a9935a008515e62517e",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_5fcc16897f7049f93363a17e7bb4ce9f",
+          "name": "append_to_response",
+          "value": "credits,images",
+          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_91327d7d6fe749e7ba63639b17625f73",
+      "_type": "request",
+      "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
+      "name": "Get episode credits",
+      "description": "Cast, crew and guest stars of the episode.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_829b925a7521ae3bde7ff2b61d31f590",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_864851c896682a5df841076060ae45e2",
+      "_type": "request",
+      "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
+      "name": "Get episode external ids",
+      "description": "External ids of the episode.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/external_ids",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_0600c99263f76c85fdb354dafa8c4323",
+      "_type": "request",
+      "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
+      "name": "Get episode images",
+      "description": "Stills of the episode.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_1bf75bb7fa7b351204a3e8e47f64cab7",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_87d44b0a3bb5616f9b65fef3e8ece8d6",
+          "name": "include_image_language",
+          "value": "en,null",
+          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_ac007c15e11b7161acd8a97626b4030a",
+      "_type": "request",
+      "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
+      "name": "Get episode videos",
+      "description": "Videos of the episode.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/videos",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_fea92498ef149e016613e77187b51139",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_366947df259f0ea025bef4cc9408c774",
+          "name": "include_video_language",
+          "value": "en",
+          "description": "Comma separated language codes to keep, for example en,ru.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_055665f33d6f605419754d5d54da5164",
+      "_type": "request",
+      "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
+      "name": "Get episode translations",
+      "description": "Translated names and overviews.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_b37554f695b15005fd23907b9488e0a8",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "People",
+      "description": "Person details, credits and popular people.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 7000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_aeb02b8638a4fe3979e8d43506d2788e",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "List popular people",
+      "description": "People ranked by current popularity.",
+      "url": "{{ _.baseUrl }}/3/person/popular",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_6b62ffbf3d55e17214c4b2161611332b",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_bdf8cce367e5a8ffb77e81aadd667a38",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_56c89a66c818f9e5495d1bad79e31cef",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get person details",
+      "description": "Returns one person. Merge sub requests with `append_to_response`, for example `combined_credits`.",
+      "url": "{{ _.baseUrl }}/3/person/287",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_ec9ef583d45f5a6fc425617872ae73a9",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3048776c08a817843b375e153622c9e4",
+          "name": "append_to_response",
+          "value": "credits,images",
+          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_aa82fdd3c2fc408204ad346099a3fbf8",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get combined credits",
+      "description": "Movie and TV credits of the person.",
+      "url": "{{ _.baseUrl }}/3/person/287/combined_credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_7b96d5bf91b3375a5f244738c1ba5a72",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_68210abca089b6c7bd7d9c7e63642185",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get movie credits",
+      "description": "Movie credits of the person.",
+      "url": "{{ _.baseUrl }}/3/person/287/movie_credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_4ceedc9b57f7c5a00fac91c0e98a7b78",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_2e560818e800bb7763e65880110d6980",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get TV credits",
+      "description": "TV credits of the person.",
+      "url": "{{ _.baseUrl }}/3/person/287/tv_credits",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_ef62ff6b8db2a1989fb238e0158f886b",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_978ada7fe8183fe49fd34a983eb8cae7",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get external ids",
+      "description": "External ids of the person, such as the IMDb id.",
+      "url": "{{ _.baseUrl }}/3/person/287/external_ids",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_aa5daa2473df0f2efb4ce1c01dfe3128",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get images",
+      "description": "Profile images of the person.",
+      "url": "{{ _.baseUrl }}/3/person/287/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_d69f1a19c2b19dcebde0971f09a80cf3",
+      "_type": "request",
+      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
+      "name": "Get translations",
+      "description": "Translated biographies.",
+      "url": "{{ _.baseUrl }}/3/person/287/translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Search",
+      "description": "Text search across movies, shows, people, collections, companies and keywords.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 8000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_caa36915d7f9ff78a23181a6e0e50745",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search movies",
+      "description": "Finds movies by title.",
+      "url": "{{ _.baseUrl }}/3/search/movie",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_cbd39537cdfec3a98248635d86bedb27",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_f445a9589c989651129317e757ee7bd7",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_0d3d5caf59ba61373ff7b5d36ceecf1a",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_5246fa3a333e63cc3443093d04459a47",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_b37e7044e83a965a69df7c3ad6ea7f72",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6c0045ebebe3c8fd603e37dc58e4f837",
+          "name": "year",
+          "value": "2010",
+          "description": "Release year.",
+          "disabled": true
+        },
+        {
+          "id": "pair_cd59933107b62dd31a9b5f6373c6ca3e",
+          "name": "primary_release_year",
+          "value": "2010",
+          "description": "Year of the first release.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_63b29275fb3698ec4bd87104e7108ea0",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search TV shows",
+      "description": "Finds TV shows by name.",
+      "url": "{{ _.baseUrl }}/3/search/tv",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_937558c204954c595265200bb94618dc",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_1898d791f7dae7b4c54b406e8a4e67a4",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_fae1e0b4157b90d3c9eb3190ecbf7ba2",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_45d259b4f0dcef58705f3ba41f019fe8",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_858b6f4cb5a34538121988b4969638e7",
+          "name": "first_air_date_year",
+          "value": "2011",
+          "description": "Year of the first air date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6f9e05b5e0937b573f6d72ab0e2b1963",
+          "name": "year",
+          "value": "2010",
+          "description": "Year of any air date.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_f636e4a0185e3d185d5e93e4f2349802",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search people",
+      "description": "Finds people by name.",
+      "url": "{{ _.baseUrl }}/3/search/person",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_9fbba0ff0baafa578bed8fb9e5f65e1a",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_f36064cbc5462811ee9841024e7c335f",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_12952df67e0f2f21118be00d937407c7",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a7915d0877b23f7f633585ebb9304d9d",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_4d2651bdb5366dd5dca44b94e95531fb",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search movies, shows and people",
+      "description": "Searches all three kinds at once. Check media_type on each result.",
+      "url": "{{ _.baseUrl }}/3/search/multi",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_441ffee823bac1f26fc52be0f1d28892",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_91e51853ed12adf7af614c0cf2dcdce5",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e8b5c847c481e05b3017462c312fcc27",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e72d10cf3a5b10e3f525718978f9907b",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_2580f2e84675107e394a306c0c7f6f61",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search collections",
+      "description": "Finds collections by name.",
+      "url": "{{ _.baseUrl }}/3/search/collection",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_ab38bf795cba79f95ae0e5e6d8de8e0a",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_f92e31cacc2aa6dfff96da7183dc7833",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_648b89225b415afbb2aa4417d2568b38",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_52b498f25973871adecfbe837cdc0be2",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_094bafc0b1cffeac437d5e3e8bf09963",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_49008102b37a809f4cacdd8f59ebc6e3",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search companies",
+      "description": "Finds companies by name.",
+      "url": "{{ _.baseUrl }}/3/search/company",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_82644f2720b5b4e9af83321ca55339c5",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_2a974e801103c55dc04e9ceb6865d6cc",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_23459cba9b6991b1ef690e477c442e2b",
+      "_type": "request",
+      "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
+      "name": "Search keywords",
+      "description": "Finds keywords by name.",
+      "url": "{{ _.baseUrl }}/3/search/keyword",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_46b4a8674b18b31243603d27e600d829",
+          "name": "query",
+          "value": "inception",
+          "description": "(Required) Text to search for.",
+          "disabled": false
+        },
+        {
+          "id": "pair_489f94101df96de7e84e2e709a09a513",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_4827ea22716a74aaf8bbe499fc314bb9",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Discover",
+      "description": "Filtered and sorted lists of movies and shows.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 9000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a92306ebcfb59a77b34974c9e56c43b9",
+      "_type": "request",
+      "parentId": "fld_4827ea22716a74aaf8bbe499fc314bb9",
+      "name": "Discover movies",
+      "description": "Filters and sorts movies. All filters are optional.",
+      "url": "{{ _.baseUrl }}/3/discover/movie",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_4e1ca14979bfa8d622f5fe31c6b27859",
+          "name": "certification",
+          "value": "R",
+          "description": "Certification to match. Needs certification_country.",
+          "disabled": true
+        },
+        {
+          "id": "pair_47cb303d54efddc67dbca518c6b5d6c9",
+          "name": "certification.gte",
+          "value": "PG",
+          "description": "Certification greater than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3d78268fccd15f1d35fe3f86ee90c13f",
+          "name": "certification.lte",
+          "value": "R",
+          "description": "Certification less than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6f7c054635d8f81bb52d4e30a8206bd9",
+          "name": "certification_country",
+          "value": "US",
+          "description": "ISO 3166-1 country code of the certification.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3b23c8c2d3ab997dab63615d06692872",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_abafe87d4382a7b6dc52bc65e3fd2f25",
+          "name": "include_video",
+          "value": "false",
+          "description": "Include entries marked as video.",
+          "disabled": true
+        },
+        {
+          "id": "pair_79692ec2854daa75bee1fcad986b6df2",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_16a998367fc96cc581badc010bd905d6",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_668a55c33a900ca7189e351b6ea83151",
+          "name": "primary_release_year",
+          "value": "2010",
+          "description": "Year of the first release.",
+          "disabled": true
+        },
+        {
+          "id": "pair_42e1fb596af175ba34dfb7792c693bce",
+          "name": "primary_release_date.gte",
+          "value": "2025-01-01",
+          "description": "First release on or after this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6a49774e0c4d817be266894e992f224d",
+          "name": "primary_release_date.lte",
+          "value": "2025-01-01",
+          "description": "First release on or before this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_87f14ce3b22b46d77e134757a18cae0c",
+          "name": "region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3950a76b2cd91c41f4a1dbfd2e2d5024",
+          "name": "release_date.gte",
+          "value": "2025-01-01",
+          "description": "Release on or after this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_f06399825e15f50becbfd9b805c73ecf",
+          "name": "release_date.lte",
+          "value": "2025-01-01",
+          "description": "Release on or before this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_05799bb1e1fb658dc46a7d19bad2bc1b",
+          "name": "sort_by",
+          "value": "popularity.desc",
+          "description": "Sort order.",
+          "disabled": true
+        },
+        {
+          "id": "pair_863804405548509640bed68ca4e58369",
+          "name": "vote_average.gte",
+          "value": "7",
+          "description": "Vote average greater than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_8337e3104e1a42cb2f5a5f7a96bd130e",
+          "name": "vote_average.lte",
+          "value": "9",
+          "description": "Vote average less than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_7546a4dbdbd665b626557ef2177ac65f",
+          "name": "vote_count.gte",
+          "value": "100",
+          "description": "Vote count greater than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a5b0ff071555d6b0ce97abee59f72ac4",
+          "name": "vote_count.lte",
+          "value": "10000",
+          "description": "Vote count less than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_8a1c9b76d6d041b975dfd79301130f66",
+          "name": "watch_region",
+          "value": "US",
+          "description": "ISO 3166-1 country code for the watch provider filters.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3fc75399e76508242760fd9831fd0e02",
+          "name": "with_cast",
+          "value": "287",
+          "description": "Person ids in the cast. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_09667388718ed0910c0aa2c482beb2d9",
+          "name": "with_companies",
+          "value": "1",
+          "description": "Company ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_aa22bac976820a9504eac7b80aff571b",
+          "name": "with_crew",
+          "value": "7467",
+          "description": "Person ids in the crew. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_40b6e61ff9fdef94f8a11e74d4d904b0",
+          "name": "with_genres",
+          "value": "18",
+          "description": "Genre ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_1b8451e7da3ec3059802ef2f7553d1fa",
+          "name": "with_keywords",
+          "value": "818",
+          "description": "Keyword ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_5310e59590f231ff5ebb33b8fd86c2ec",
+          "name": "with_origin_country",
+          "value": "US",
+          "description": "ISO 3166-1 country code of origin.",
+          "disabled": true
+        },
+        {
+          "id": "pair_0d4dedcf37cd003c3e990b5bf5a8fdbb",
+          "name": "with_original_language",
+          "value": "en",
+          "description": "ISO 639-1 original language code.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6f934d373abb0b493d79fbacf9172dcf",
+          "name": "with_people",
+          "value": "287",
+          "description": "Person ids in the cast or crew. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_f59be4b5be1a68afac1581ac251291a3",
+          "name": "with_release_type",
+          "value": "2|3",
+          "description": "Release types to match, for example 2|3. Same codes as release_dates.",
+          "disabled": true
+        },
+        {
+          "id": "pair_d961c9471ec390dd14b2465f038ffb26",
+          "name": "with_runtime.gte",
+          "value": "90",
+          "description": "Runtime in minutes, at least.",
+          "disabled": true
+        },
+        {
+          "id": "pair_cc64a19b0ae9f42d238bfc971142aa09",
+          "name": "with_runtime.lte",
+          "value": "180",
+          "description": "Runtime in minutes, at most.",
+          "disabled": true
+        },
+        {
+          "id": "pair_b09ded5fe4818d7702bbd878fb75f96a",
+          "name": "with_watch_monetization_types",
+          "value": "flatrate",
+          "description": "Offer types: flatrate, free, ads, rent or buy. Needs watch_region.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a3f76876b7c6e0c898e584eeeca06af1",
+          "name": "with_watch_providers",
+          "value": "8",
+          "description": "Watch provider ids. Needs watch_region. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_52657a27dde8919fcf3b5e24459a34b9",
+          "name": "without_companies",
+          "value": "1",
+          "description": "Company ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_8125b463a3a6a914a83c50095e192cbc",
+          "name": "without_genres",
+          "value": "27",
+          "description": "Genre ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e2b582d6c7a6396834fe08c26d1c9ec3",
+          "name": "without_keywords",
+          "value": "818",
+          "description": "Keyword ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_d12515230a4ec7e77edf7a4451a0a266",
+          "name": "without_watch_providers",
+          "value": "8",
+          "description": "Watch provider ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e6ceb0540e5be8cb1ce2db6d68731d5c",
+          "name": "year",
+          "value": "2010",
+          "description": "Release year.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a6ea99fe77d0af87379fe8d2c73b021f",
+      "_type": "request",
+      "parentId": "fld_4827ea22716a74aaf8bbe499fc314bb9",
+      "name": "Discover TV shows",
+      "description": "Filters and sorts TV shows. All filters are optional.",
+      "url": "{{ _.baseUrl }}/3/discover/tv",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_32ed82b03495f675d4e9119a433ff5b8",
+          "name": "air_date.gte",
+          "value": "2025-01-01",
+          "description": "An episode aired on or after this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_aea71fcfbf22a03f0f376543ac490861",
+          "name": "air_date.lte",
+          "value": "2025-01-01",
+          "description": "An episode aired on or before this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_5732b88da025a8a12c038b1d65153901",
+          "name": "first_air_date.gte",
+          "value": "2025-01-01",
+          "description": "First aired on or after this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_54356550b9652067dcc5fcafd4181266",
+          "name": "first_air_date.lte",
+          "value": "2025-01-01",
+          "description": "First aired on or before this date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_25fc1c15b302fdbaff9d1b3d897ec184",
+          "name": "first_air_date_year",
+          "value": "2011",
+          "description": "Year of the first air date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_2631d51c5bff92bc3a9baa88e67aab7d",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_778e754990ed42ec50c706f9d3b739f1",
+          "name": "include_null_first_air_dates",
+          "value": "false",
+          "description": "Include shows without a first air date.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a4ebee9c388f4074dd4568e1d216523c",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_06a5f076bf603bb0ecc4cbfdae9de0ea",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        },
+        {
+          "id": "pair_f8de972f790a0ebc0807e1c630f0e158",
+          "name": "screened_theatrically",
+          "value": "true",
+          "description": "Only shows with an episode screened in cinemas.",
+          "disabled": true
+        },
+        {
+          "id": "pair_f6adb0a03f1dcb9422d5c26023ed5f6d",
+          "name": "sort_by",
+          "value": "popularity.desc",
+          "description": "Sort order.",
+          "disabled": true
+        },
+        {
+          "id": "pair_906ae27d594149272729fa871ef54df6",
+          "name": "timezone",
+          "value": "America/New_York",
+          "description": "IANA timezone that defines the day, for example America/New_York.",
+          "disabled": true
+        },
+        {
+          "id": "pair_c2cacc47892b16fd9a444cedc0873350",
+          "name": "vote_average.gte",
+          "value": "7",
+          "description": "Vote average greater than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_d9da39282509a83dd925b6987d32c6ff",
+          "name": "vote_average.lte",
+          "value": "9",
+          "description": "Vote average less than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3d77a53acfb222f75993d1d1fc5b05b4",
+          "name": "vote_count.gte",
+          "value": "100",
+          "description": "Vote count greater than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_347c79b88b3f9322d8fc1f1ed8cca527",
+          "name": "vote_count.lte",
+          "value": "10000",
+          "description": "Vote count less than or equal to this value.",
+          "disabled": true
+        },
+        {
+          "id": "pair_76661f3c59bafde9fe0095e5b485e5a8",
+          "name": "watch_region",
+          "value": "US",
+          "description": "ISO 3166-1 country code for the watch provider filters.",
+          "disabled": true
+        },
+        {
+          "id": "pair_c2d5c5deb205dd0f088762fba7cb1b28",
+          "name": "with_companies",
+          "value": "1",
+          "description": "Company ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_dd672a55eb673af86d1da5543de39929",
+          "name": "with_genres",
+          "value": "18",
+          "description": "Genre ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6e21d9ff19adbde1507b9f8925c2b524",
+          "name": "with_keywords",
+          "value": "818",
+          "description": "Keyword ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_9abca11e5dffee359dad6616237ecb57",
+          "name": "with_networks",
+          "value": "49",
+          "description": "Network ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_c466035b9392ffb6c2ee29cb7255bed8",
+          "name": "with_origin_country",
+          "value": "US",
+          "description": "ISO 3166-1 country code of origin.",
+          "disabled": true
+        },
+        {
+          "id": "pair_37f2c364471da01df0a0382bdbca4c6a",
+          "name": "with_original_language",
+          "value": "en",
+          "description": "ISO 639-1 original language code.",
+          "disabled": true
+        },
+        {
+          "id": "pair_4802b79337d7fa804f9ec821d77ef3e7",
+          "name": "with_runtime.gte",
+          "value": "90",
+          "description": "Episode runtime in minutes, at least.",
+          "disabled": true
+        },
+        {
+          "id": "pair_97a4de66fbedac7eb9da7e083905138b",
+          "name": "with_runtime.lte",
+          "value": "180",
+          "description": "Episode runtime in minutes, at most.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e5235b781bf54d855be1283ec16dd2cc",
+          "name": "with_status",
+          "value": "3",
+          "description": "Status ids: 0 returning, 1 planned, 2 in production, 3 ended, 4 canceled, 5 pilot.",
+          "disabled": true
+        },
+        {
+          "id": "pair_83c254811904d9cba701b9909205c46a",
+          "name": "with_type",
+          "value": "4",
+          "description": "Type ids: 0 documentary, 1 news, 2 miniseries, 3 reality, 4 scripted, 5 talk show, 6 video.",
+          "disabled": true
+        },
+        {
+          "id": "pair_3e672f80c6a43f393dbe8969efb84ec1",
+          "name": "with_watch_monetization_types",
+          "value": "flatrate",
+          "description": "Offer types: flatrate, free, ads, rent or buy. Needs watch_region.",
+          "disabled": true
+        },
+        {
+          "id": "pair_94625a6cfa02780b375c34fecb1a4f7b",
+          "name": "with_watch_providers",
+          "value": "8",
+          "description": "Watch provider ids. Needs watch_region. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a36dbce5fcbd296c576784b199a1c09c",
+          "name": "without_companies",
+          "value": "1",
+          "description": "Company ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_6f742fe8d431a34ecf85bc190c31e25d",
+          "name": "without_genres",
+          "value": "27",
+          "description": "Genre ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_c88b688be790e61f8ff4a852e18c6fee",
+          "name": "without_keywords",
+          "value": "818",
+          "description": "Keyword ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        },
+        {
+          "id": "pair_1c423618c79890ec8012b95eddcd1099",
+          "name": "without_watch_providers",
+          "value": "8",
+          "description": "Watch provider ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_8a12d5626fe3d27c977e6f2ac507d431",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Trending",
+      "description": "Trending movies, shows and people.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 10000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_38d0002f6dec5079de0506f6fff0d133",
+      "_type": "request",
+      "parentId": "fld_8a12d5626fe3d27c977e6f2ac507d431",
+      "name": "Get trending titles",
+      "description": "Trending movies, shows or people for a day or a week. Check media_type on each result.",
+      "url": "{{ _.baseUrl }}/3/trending/all/day",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_cf77fc3d1aab909f974e4a296d68f322",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_0bb3517d78843ddd85efaf45494b330b",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_96817ade02e758261256fdfcf062e850",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Genres",
+      "description": "Genre ids and names.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 11000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_1767cc482296781e7b2d9b93ebac8b1b",
+      "_type": "request",
+      "parentId": "fld_96817ade02e758261256fdfcf062e850",
+      "name": "List movie genres",
+      "description": "Genre ids and names used by movies.",
+      "url": "{{ _.baseUrl }}/3/genre/movie/list",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_e921828e31b1e97ffd3348aa9b6df623",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_ab5787af538adb3c6627bd04c1caa1a1",
+      "_type": "request",
+      "parentId": "fld_96817ade02e758261256fdfcf062e850",
+      "name": "List TV genres",
+      "description": "Genre ids and names used by TV shows.",
+      "url": "{{ _.baseUrl }}/3/genre/tv/list",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_060d70c173ad1a9bfd9635ac7d3ae557",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_4bbb632f02fd69807705c0179999c17d",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Collections",
+      "description": "Movie collections.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 12000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_0175ee2c5abfc173d1cf599347e0cccc",
+      "_type": "request",
+      "parentId": "fld_4bbb632f02fd69807705c0179999c17d",
+      "name": "Get collection details",
+      "description": "Returns one collection with its movies in the parts list.",
+      "url": "{{ _.baseUrl }}/3/collection/10",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_5f3c4fe50743aa6d33e9ba3e12336f53",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_ee4586160c6f969ad690193b30ee937a",
+      "_type": "request",
+      "parentId": "fld_4bbb632f02fd69807705c0179999c17d",
+      "name": "Get collection images",
+      "description": "Posters and backdrops of the collection.",
+      "url": "{{ _.baseUrl }}/3/collection/10/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_9675f5fcfd68fd884e83e1b1a3929b8c",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a285b4235f3e6fe81e846d75197d30f1",
+          "name": "include_image_language",
+          "value": "en,null",
+          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_7024ae801877ace42210ce2b8bea60d9",
+      "_type": "request",
+      "parentId": "fld_4bbb632f02fd69807705c0179999c17d",
+      "name": "Get collection translations",
+      "description": "Translated names and overviews.",
+      "url": "{{ _.baseUrl }}/3/collection/10/translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Companies",
+      "description": "Production companies.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 13000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_f825c65581224e565b2867715b068800",
+      "_type": "request",
+      "parentId": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
+      "name": "Get company details",
+      "description": "Returns one production company.",
+      "url": "{{ _.baseUrl }}/3/company/1",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_3cedcfe3717faed5620cf448abd56a28",
+      "_type": "request",
+      "parentId": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
+      "name": "Get alternative names",
+      "description": "Other names of the company.",
+      "url": "{{ _.baseUrl }}/3/company/1/alternative_names",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_cd6717ea9638ad0fff66179fa8e5c101",
+      "_type": "request",
+      "parentId": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
+      "name": "Get company images",
+      "description": "Logos of the company.",
+      "url": "{{ _.baseUrl }}/3/company/1/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Networks",
+      "description": "TV networks.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 14000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_bb5bc970c9e390f30835ad789b399e1c",
+      "_type": "request",
+      "parentId": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
+      "name": "Get network details",
+      "description": "Returns one TV network.",
+      "url": "{{ _.baseUrl }}/3/network/1",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a9bd82eb6f993d4c810fbeed6728f341",
+      "_type": "request",
+      "parentId": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
+      "name": "Get alternative names",
+      "description": "Other names of the network.",
+      "url": "{{ _.baseUrl }}/3/network/1/alternative_names",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_2317e4d7bf088cd2583be3d9aedb61a9",
+      "_type": "request",
+      "parentId": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
+      "name": "Get network images",
+      "description": "Logos of the network.",
+      "url": "{{ _.baseUrl }}/3/network/1/images",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_f530db58b3e5088dc7412c6d2298ba3f",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Keywords",
+      "description": "Keywords and the movies tagged with them.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 15000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_cbb89ad90c3424d79c713e9282a9ef4b",
+      "_type": "request",
+      "parentId": "fld_f530db58b3e5088dc7412c6d2298ba3f",
+      "name": "Get keyword details",
+      "description": "Returns the name of one keyword.",
+      "url": "{{ _.baseUrl }}/3/keyword/818",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_4c1aa39f089fb7e8365c7fe5a9923c31",
+      "_type": "request",
+      "parentId": "fld_f530db58b3e5088dc7412c6d2298ba3f",
+      "name": "Get movies with a keyword",
+      "description": "Movies tagged with the keyword.",
+      "url": "{{ _.baseUrl }}/3/keyword/818/movies",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_fbff5c41517f2fc0955cc60e9a976863",
+          "name": "include_adult",
+          "value": "false",
+          "description": "Include adult titles in the results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_ab3b3d2f87cc2b096b9720d283bb2fb5",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_182d40c3407ac14ec2da7ce814503b98",
+          "name": "page",
+          "value": "1",
+          "description": "Page number. Lists have at most 500 pages.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_df251b06eefdaa932e97b54fbe9a74d3",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Find",
+      "description": "Look up titles by an id from another system.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 16000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_77bbe76377dea377e31ac0dc082a1a46",
+      "_type": "request",
+      "parentId": "fld_df251b06eefdaa932e97b54fbe9a74d3",
+      "name": "Find by external id",
+      "description": "Finds movies, shows, seasons, episodes and people by an id from another system. amodb accepts `imdb_id`, `tvdb_id`, `wikidata_id` and `kinopoisk_id`.",
+      "url": "{{ _.baseUrl }}/3/find/tt0137523",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_cc1ad1099d46cba45ce498647caad0ce",
+          "name": "external_source",
+          "value": "imdb_id",
+          "description": "(Required) System the id belongs to.",
+          "disabled": false
+        },
+        {
+          "id": "pair_f7677184400dbf1e96d0183ee3ea0732",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Configuration",
+      "description": "Image base URLs, size lists and reference data.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 17000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_c37804ca846db552b559f335c3b28f81",
+      "_type": "request",
+      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "name": "Get configuration",
+      "description": "Image base URLs and size lists. images.secure_base_url is https://img.amodb.dev/t/p/. Append a size and a file_path.",
+      "url": "{{ _.baseUrl }}/3/configuration",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_61b3a340a6a6e5177351bb6fe2f84c06",
+      "_type": "request",
+      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "name": "List countries",
+      "description": "Countries with ISO 3166-1 codes.",
+      "url": "{{ _.baseUrl }}/3/configuration/countries",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_a1ffb99a87fd0d3f3a7457c40418c5ef",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_18200a138eb095f40a45156711615caf",
+      "_type": "request",
+      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "name": "List jobs",
+      "description": "Crew departments and their jobs.",
+      "url": "{{ _.baseUrl }}/3/configuration/jobs",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_c5f84486df588421b3e12a99ca424ca2",
+      "_type": "request",
+      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "name": "List languages",
+      "description": "Languages with ISO 639-1 codes.",
+      "url": "{{ _.baseUrl }}/3/configuration/languages",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_648a784bf2f5b5a22c3d74eb442cda2f",
+      "_type": "request",
+      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "name": "List primary translations",
+      "description": "Language and country tags used for translations.",
+      "url": "{{ _.baseUrl }}/3/configuration/primary_translations",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_4a8f508e0346cf56107c0f6369795c3c",
+      "_type": "request",
+      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
+      "name": "List timezones",
+      "description": "Timezones by country.",
+      "url": "{{ _.baseUrl }}/3/configuration/timezones",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_b65e36f73b8a3eb61a2d245a5d6b374d",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Certifications",
+      "description": "Age rating lists by country.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 18000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_e392142f3e4ebfbc60b3801a638b2023",
+      "_type": "request",
+      "parentId": "fld_b65e36f73b8a3eb61a2d245a5d6b374d",
+      "name": "List movie certifications",
+      "description": "Movie age ratings by country.",
+      "url": "{{ _.baseUrl }}/3/certification/movie/list",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_35cf8bf59f3dbea8c78ddd092959aa65",
+      "_type": "request",
+      "parentId": "fld_b65e36f73b8a3eb61a2d245a5d6b374d",
+      "name": "List TV certifications",
+      "description": "TV age ratings by country.",
+      "url": "{{ _.baseUrl }}/3/certification/tv/list",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_6f19395163ec35ca22393d57e01511d1",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Watch providers",
+      "description": "Provider catalogs and regions.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 19000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_0da01f4390bb1032feea332d3bd753ce",
+      "_type": "request",
+      "parentId": "fld_6f19395163ec35ca22393d57e01511d1",
+      "name": "List watch provider regions",
+      "description": "Countries that have watch provider data.",
+      "url": "{{ _.baseUrl }}/3/watch/providers/regions",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_807574b350358e19e093e6b5563f68ca",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_e9120da4d5c7ee9d20198f3a2e0c37da",
+      "_type": "request",
+      "parentId": "fld_6f19395163ec35ca22393d57e01511d1",
+      "name": "List movie watch providers",
+      "description": "Providers that offer movies.",
+      "url": "{{ _.baseUrl }}/3/watch/providers/movie",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_314d34c1ca6e638e4b28620e394969c2",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_10b810154a332007f16f8cff6cd39c5f",
+          "name": "watch_region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows the list.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8beffcf0291d653aeebc560a832dcb5e",
+      "_type": "request",
+      "parentId": "fld_6f19395163ec35ca22393d57e01511d1",
+      "name": "List TV watch providers",
+      "description": "Providers that offer TV shows.",
+      "url": "{{ _.baseUrl }}/3/watch/providers/tv",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_9ec8be4a37c1894ee0d2014923a36742",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_e2d306365862a19ad10472b30602ef9e",
+          "name": "watch_region",
+          "value": "US",
+          "description": "ISO 3166-1 country code that narrows the list.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_b83c4cdafef5813f0872892b666e2b04",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Reviews",
+      "description": "Single review lookup.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 20000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8041a369dfb081cb13ee9c3c043f912d",
+      "_type": "request",
+      "parentId": "fld_b83c4cdafef5813f0872892b666e2b04",
+      "name": "Get review details",
+      "description": "Returns one review with the title it belongs to.",
+      "url": "{{ _.baseUrl }}/3/review/5a64d1ce9251417d7c01a2ae",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_bfac50d6424b5166c3ee2808c85ae7c1",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Credits",
+      "description": "Single credit lookup.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 21000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_ee8a9c64ad7e81baf2c44acd229f2ce9",
+      "_type": "request",
+      "parentId": "fld_bfac50d6424b5166c3ee2808c85ae7c1",
+      "name": "Get credit details",
+      "description": "Returns one credit with the person and the title.",
+      "url": "{{ _.baseUrl }}/3/credit/52fe4250c3a36847f80149f3",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_956ac864db530e3e357ec985732366b1",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Extensions",
+      "description": "Routes that exist only in amodb: `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 22000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_f5cc259e25ec27dbde173c81b7d40aa1",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get movie moods",
+      "description": "Mood meters of the movie. Also available as `append_to_response=moods`.",
+      "url": "{{ _.baseUrl }}/3/movie/550/moods",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_6236169f1840e1b61efc68fbe2fe9fcb",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get movie soundtracks",
+      "description": "Soundtrack listing of the movie. Also available as `append_to_response=soundtracks`.",
+      "url": "{{ _.baseUrl }}/3/movie/550/soundtracks",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_2c7d25d76737b8eb98d6d26d1c11c7fe",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get movie ratings",
+      "description": "Ratings of the movie from several providers. A provider without data is null. Also available as `append_to_response=ratings`.",
+      "url": "{{ _.baseUrl }}/3/movie/550/ratings",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_c7d70e229fbbd3a7764afb1477cc423a",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get movie linked data facts",
+      "description": "Selected facts about the movie. Also available as `append_to_response=wikidata`.",
+      "url": "{{ _.baseUrl }}/3/movie/550/wikidata",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a56b0beed51da32356f131bbb7fbc1f2",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get TV show moods",
+      "description": "Mood meters of the TV show. Also available as `append_to_response=moods`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/moods",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_fb00c79af7e7c1e807e1e80cf87e386f",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get TV show soundtracks",
+      "description": "Soundtrack listing of the TV show. Also available as `append_to_response=soundtracks`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/soundtracks",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_2c8dcff90482b8b686c4f2c387081d78",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get TV show ratings",
+      "description": "Ratings of the TV show from several providers. A provider without data is null. Also available as `append_to_response=ratings`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/ratings",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_8a766ad0784d8a95ee7212da5bb2fa9e",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get TV show linked data facts",
+      "description": "Selected facts about the TV show. Also available as `append_to_response=wikidata`.",
+      "url": "{{ _.baseUrl }}/3/tv/1399/wikidata",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_e9661dc3a0ac8ce656f5d3d928cb2a3f",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get movie showtimes",
+      "description": "Cinema showtimes for one country when known. Also available as `append_to_response=showtimes`.",
+      "url": "{{ _.baseUrl }}/3/movie/550/showtimes",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_b3a443fd719eb7afc8c388ea241f261e",
+          "name": "country",
+          "value": "US",
+          "description": "(Required) ISO 3166-1 country code.",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_0cde62a8699a1df5f2d5d994ea95d4da",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "OMDb",
+      "description": "OMDb compatible lookup and search.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 23000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_d87fb77ac5e75a60cfa0e1ab89368069",
+      "_type": "request",
+      "parentId": "fld_0cde62a8699a1df5f2d5d994ea95d4da",
+      "name": "Look up or search titles",
+      "description": "OMDb compatible route. Send i for an IMDb id, t for a title, or s to search. Every value in the response is a string. A lookup that finds nothing returns HTTP 200 with Response False. The trailing slash is optional.",
+      "url": "{{ _.baseUrl }}/omdb/",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_c284caaf006b9ca6526787db316b52f4",
+          "name": "i",
+          "value": "tt0137523",
+          "description": "IMDb id. Returns one title.",
+          "disabled": false
+        },
+        {
+          "id": "pair_819cdd9871f7102a9b0e21f4205545bf",
+          "name": "t",
+          "value": "Fight Club",
+          "description": "Title to look up. Returns one title.",
+          "disabled": true
+        },
+        {
+          "id": "pair_a6cfbf5a4c5eeea036b1558dbf29efd0",
+          "name": "s",
+          "value": "inception",
+          "description": "Title to search for. Returns a page of results.",
+          "disabled": true
+        },
+        {
+          "id": "pair_4a166657635b56b28a91303879a8179b",
+          "name": "type",
+          "value": "movie",
+          "description": "Kind of title.",
+          "disabled": true
+        },
+        {
+          "id": "pair_626dda680f9b3dab659ed9d8a18adb64",
+          "name": "y",
+          "value": "1999",
+          "description": "Release year.",
+          "disabled": true
+        },
+        {
+          "id": "pair_9a55f463b0edd5addeb8db18edc998c4",
+          "name": "plot",
+          "value": "short",
+          "description": "Length of the Plot field.",
+          "disabled": true
+        },
+        {
+          "id": "pair_648880e5104aa1c9766af04a872c02f5",
+          "name": "page",
+          "value": "1",
+          "description": "Page of search results. Used with s.",
+          "disabled": true
+        },
+        {
+          "id": "pair_4589983c2804ced809fd7732f1ffca37",
+          "name": "r",
+          "value": "json",
+          "description": "Response format. Only json is offered. xml returns 400.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "apikey",
+        "key": "apikey",
+        "value": "{{ _.apiKey }}",
+        "addTo": "queryParams"
+      },
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_09e871c98fef3b901a775def173e4126",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Images",
+      "description": "Image files on the image host.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 24000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_b3f44a3a3d69ef5b99b1b436b25d14a0",
+      "_type": "request",
+      "parentId": "fld_09e871c98fef3b901a775def173e4126",
+      "name": "Get an image",
+      "description": "Serves an image on the img.amodb.dev host. No key is needed. Build the path from images.secure_base_url in /3/configuration, a size and the file_path of an image without its leading slash.",
+      "url": "{{ _.imageBaseUrl }}/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "image/jpeg"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "fld_cf2e5f26fef855ce77a1ba3afd5e912a",
+      "_type": "request_group",
+      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
+      "name": "Plans",
+      "description": "Public list of plans and prices.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 25000,
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_a0b89662e8396fe09706ce63a0e9c8fa",
+      "_type": "request",
+      "parentId": "fld_cf2e5f26fef855ce77a1ba3afd5e912a",
+      "name": "List plans",
+      "description": "Public list of plans, billing periods and prices. No key is needed. The example values are illustrative. Live names and prices come from this endpoint.",
+      "url": "{{ _.baseUrl }}/plans",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    }
+  ]
+}

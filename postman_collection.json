@@ -1,0 +1,6084 @@
+{
+  "item": [
+    {
+      "id": "546997c3-7a3c-4732-aab3-ad0d8ef7a9b8",
+      "name": "Movies",
+      "description": {
+        "content": "Movie details and the data attached to a movie.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "56581e94-8f14-44c7-a7c3-c4ec0170391c",
+          "name": "Get movie details",
+          "request": {
+            "name": "Get movie details",
+            "description": {
+              "content": "Returns one movie. Merge sub requests with `append_to_response`, for example `credits,images`. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "append_to_response",
+                  "value": "credits,images",
+                  "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2247ec8-9707-48fb-a1a2-14a0b356e481",
+          "name": "Get alternative titles",
+          "request": {
+            "name": "Get alternative titles",
+            "description": {
+              "content": "Titles of the movie in other countries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "alternative_titles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "country",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows the list."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd71c96b-57cd-4d46-acc8-9f04939a523d",
+          "name": "Get credits",
+          "request": {
+            "name": "Get credits",
+            "description": {
+              "content": "Cast and crew of the movie.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a5f4bc32-a38e-4f6f-a6e2-f011c262724d",
+          "name": "Get external ids",
+          "request": {
+            "name": "Get external ids",
+            "description": {
+              "content": "External ids of the movie, such as the IMDb id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "external_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce58cad0-b94b-4ac4-a61e-d603b66d3f9a",
+          "name": "Get images",
+          "request": {
+            "name": "Get images",
+            "description": {
+              "content": "Posters, backdrops and logos.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_image_language",
+                  "value": "en,null",
+                  "description": "Comma separated language codes to keep, for example en,null. Add null for images without text."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b545b85-5ba4-44a5-a806-4970c523476b",
+          "name": "Get keywords",
+          "request": {
+            "name": "Get keywords",
+            "description": {
+              "content": "Keywords attached to the movie.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "keywords"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f17bd47b-d54d-4695-a3b9-a1c6c27e1e6d",
+          "name": "Get recommendations",
+          "request": {
+            "name": "Get recommendations",
+            "description": {
+              "content": "Movies recommended for this movie.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "recommendations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eec0651a-c022-459b-a0dc-e157fa2f8aa5",
+          "name": "Get release dates",
+          "request": {
+            "name": "Get release dates",
+            "description": {
+              "content": "Release dates and certifications by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "release_dates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "91451fb3-ee0d-4ce4-a4af-055d05cde61d",
+          "name": "Get reviews",
+          "request": {
+            "name": "Get reviews",
+            "description": {
+              "content": "User reviews of the movie.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "reviews"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "797790cc-0dc9-4183-adf6-16db51e1f236",
+          "name": "Get similar movies",
+          "request": {
+            "name": "Get similar movies",
+            "description": {
+              "content": "Movies with similar genres and keywords.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "similar"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2468af8e-e6d1-459d-a16f-005793381b65",
+          "name": "Get translations",
+          "request": {
+            "name": "Get translations",
+            "description": {
+              "content": "Translated titles and overviews.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2df2f066-6fad-4257-a921-97ccc0ffcda0",
+          "name": "Get videos",
+          "request": {
+            "name": "Get videos",
+            "description": {
+              "content": "Trailers, teasers and clips.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "videos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_video_language",
+                  "value": "en",
+                  "description": "Comma separated language codes to keep, for example en,ru."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "94ce7c70-36c6-4987-ac02-abb5fe89225e",
+          "name": "Get watch providers",
+          "request": {
+            "name": "Get watch providers",
+            "description": {
+              "content": "Where the movie can be streamed, rented or bought, by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "watch",
+                "providers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d2a2d389-3ccd-4e52-a426-383f6ea3eda4",
+          "name": "Get lists with the movie",
+          "request": {
+            "name": "Get lists with the movie",
+            "description": {
+              "content": "User lists that contain the movie.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "lists"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f781d7c3-4d57-4404-a5ff-57c4ccfa326b",
+      "name": "Movie lists",
+      "description": {
+        "content": "Popular, top rated, upcoming and now playing movies.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c76a318a-d067-4d9f-a74a-00c0e6cc3891",
+          "name": "List popular movies",
+          "request": {
+            "name": "List popular movies",
+            "description": {
+              "content": "Movies ranked by current popularity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                "popular"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "336c79a7-bec5-4524-a42c-88553bfd6b47",
+          "name": "List top rated movies",
+          "request": {
+            "name": "List top rated movies",
+            "description": {
+              "content": "Movies ranked by vote average.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                "top_rated"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "983c40f3-6248-45ea-a3a1-3f1c3ff2f8ec",
+          "name": "List upcoming movies",
+          "request": {
+            "name": "List upcoming movies",
+            "description": {
+              "content": "Movies with a release date in the near future.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                "upcoming"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0bdfc3f7-41b3-4ed5-a7a3-a9266be8e35e",
+          "name": "List movies now playing",
+          "request": {
+            "name": "List movies now playing",
+            "description": {
+              "content": "Movies currently in cinemas.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                "now_playing"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "99c1626d-b77f-4ef5-a6c7-d91675009a6c",
+      "name": "TV shows",
+      "description": {
+        "content": "TV show details and the data attached to a show.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cc354d42-c30d-42a6-a6cc-ca15d3c7d73e",
+          "name": "Get TV show details",
+          "request": {
+            "name": "Get TV show details",
+            "description": {
+              "content": "Returns one TV show. Merge sub requests with `append_to_response`, for example `aggregate_credits,images`. amodb also accepts `moods`, `soundtracks`, `ratings` and `wikidata`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "append_to_response",
+                  "value": "credits,images",
+                  "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce3e5166-de00-4be5-a0c3-c4ce62812b43",
+          "name": "Get aggregate credits",
+          "request": {
+            "name": "Get aggregate credits",
+            "description": {
+              "content": "Cast and crew summed over all episodes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "aggregate_credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "90564a48-4298-4d30-a38f-87957ca4f58b",
+          "name": "Get credits",
+          "request": {
+            "name": "Get credits",
+            "description": {
+              "content": "Cast and crew of the latest season.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "501dd599-1cae-416e-a1ab-decea31ba208",
+          "name": "Get content ratings",
+          "request": {
+            "name": "Get content ratings",
+            "description": {
+              "content": "Age ratings by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "content_ratings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6603bdf3-262a-482d-a5ca-3aa9209b2df7",
+          "name": "Get episode groups",
+          "request": {
+            "name": "Get episode groups",
+            "description": {
+              "content": "Alternative episode orders of the show.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "episode_groups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "706bc52f-d335-4c28-a0d3-a4b9d1299bf8",
+          "name": "Get external ids",
+          "request": {
+            "name": "Get external ids",
+            "description": {
+              "content": "External ids of the show, such as the IMDb id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "external_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32761e08-ae34-4e1e-a35d-239c235997af",
+          "name": "Get images",
+          "request": {
+            "name": "Get images",
+            "description": {
+              "content": "Posters, backdrops and logos.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_image_language",
+                  "value": "en,null",
+                  "description": "Comma separated language codes to keep, for example en,null. Add null for images without text."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8f73a295-25b6-42db-a148-6a3b352ecdd9",
+          "name": "Get keywords",
+          "request": {
+            "name": "Get keywords",
+            "description": {
+              "content": "Keywords attached to the show.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "keywords"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f892a999-fa68-4aba-a3c7-3d5459c12e10",
+          "name": "Get recommendations",
+          "request": {
+            "name": "Get recommendations",
+            "description": {
+              "content": "Shows recommended for this show.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "recommendations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c199c2c6-6324-43fe-acad-fcf686ecb5f5",
+          "name": "Get reviews",
+          "request": {
+            "name": "Get reviews",
+            "description": {
+              "content": "User reviews of the show.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "reviews"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d451b1e6-fbc4-4be7-a939-37ad8ff5f1f3",
+          "name": "Get similar shows",
+          "request": {
+            "name": "Get similar shows",
+            "description": {
+              "content": "Shows with similar genres and keywords.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "similar"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3930f619-6030-48cb-af2c-d2fbfa13a7bd",
+          "name": "Get translations",
+          "request": {
+            "name": "Get translations",
+            "description": {
+              "content": "Translated names and overviews.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7efc7fe-0e9a-478a-a6bd-08d283e04082",
+          "name": "Get videos",
+          "request": {
+            "name": "Get videos",
+            "description": {
+              "content": "Trailers, teasers and clips.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "videos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_video_language",
+                  "value": "en",
+                  "description": "Comma separated language codes to keep, for example en,ru."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b8774f0-5ae7-4256-a535-0d75c1e1fcf4",
+          "name": "Get watch providers",
+          "request": {
+            "name": "Get watch providers",
+            "description": {
+              "content": "Where the show can be streamed, rented or bought, by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "watch",
+                "providers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b279b97b-07f2-4eb5-a080-6d7d52fa4010",
+          "name": "Get alternative titles",
+          "request": {
+            "name": "Get alternative titles",
+            "description": {
+              "content": "Names of the show in other countries.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "alternative_titles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6d11a02-4d8f-4ad5-a296-43007e05972c",
+          "name": "Get episodes screened in cinemas",
+          "request": {
+            "name": "Get episodes screened in cinemas",
+            "description": {
+              "content": "Episodes that had a theatrical screening.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "screened_theatrically"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5094bd02-f831-4b93-a952-4ee54e971edb",
+      "name": "TV lists",
+      "description": {
+        "content": "Popular, top rated, airing today and on the air shows.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "32df0921-9981-4c15-ab28-f9aa22047489",
+          "name": "List popular TV shows",
+          "request": {
+            "name": "List popular TV shows",
+            "description": {
+              "content": "Shows ranked by current popularity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                "popular"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3690c8b1-4bfb-4621-a1c8-48b620604476",
+          "name": "List top rated TV shows",
+          "request": {
+            "name": "List top rated TV shows",
+            "description": {
+              "content": "Shows ranked by vote average.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                "top_rated"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b264846-6c29-4140-ab64-ba39a7f81096",
+          "name": "List shows airing today",
+          "request": {
+            "name": "List shows airing today",
+            "description": {
+              "content": "Shows with an episode on air today.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                "airing_today"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "timezone",
+                  "value": "America/New_York",
+                  "description": "IANA timezone that defines the day, for example America/New_York."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6bb3d543-4133-460a-a285-0f24031f9578",
+          "name": "List shows on the air",
+          "request": {
+            "name": "List shows on the air",
+            "description": {
+              "content": "Shows with an episode in the next 7 days.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                "on_the_air"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "timezone",
+                  "value": "America/New_York",
+                  "description": "IANA timezone that defines the day, for example America/New_York."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "620ffcf5-97a1-44e5-a3ed-47b25d8c2d3d",
+      "name": "Seasons",
+      "description": {
+        "content": "Season details and the data attached to a season.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bf6f9c26-7ff3-497e-a324-30fb70a2a153",
+          "name": "Get season details",
+          "request": {
+            "name": "Get season details",
+            "description": {
+              "content": "Returns one season with its episodes. Merge sub requests with `append_to_response`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "append_to_response",
+                  "value": "credits,images",
+                  "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb977a34-76eb-4ac3-a717-fc90407e364c",
+          "name": "Get season credits",
+          "request": {
+            "name": "Get season credits",
+            "description": {
+              "content": "Cast and crew of the season.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c5255a6a-58bb-43c6-a75e-6535262a362c",
+          "name": "Get season external ids",
+          "request": {
+            "name": "Get season external ids",
+            "description": {
+              "content": "External ids of the season.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "external_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "958234e8-60e9-4c7d-a66a-a92426379cef",
+          "name": "Get season images",
+          "request": {
+            "name": "Get season images",
+            "description": {
+              "content": "Posters of the season.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_image_language",
+                  "value": "en,null",
+                  "description": "Comma separated language codes to keep, for example en,null. Add null for images without text."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "51acc140-21a7-4083-a949-9b5b98b39335",
+          "name": "Get season videos",
+          "request": {
+            "name": "Get season videos",
+            "description": {
+              "content": "Videos of the season.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "videos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_video_language",
+                  "value": "en",
+                  "description": "Comma separated language codes to keep, for example en,ru."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e5611c1d-bdf6-49dc-aacb-e71a34141032",
+          "name": "Get season translations",
+          "request": {
+            "name": "Get season translations",
+            "description": {
+              "content": "Translated names and overviews.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6edbda1b-46a1-4cb2-a433-5c4ab6b8a131",
+      "name": "Episodes",
+      "description": {
+        "content": "Episode details and the data attached to an episode.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2ff6de3b-a471-4674-a682-6d5174292741",
+          "name": "Get episode details",
+          "request": {
+            "name": "Get episode details",
+            "description": {
+              "content": "Returns one episode. Merge sub requests with `append_to_response`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "episode",
+                ":episode_number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "append_to_response",
+                  "value": "credits,images",
+                  "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "episode_number",
+                  "description": "(Required) Episode number inside the season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dcfba138-9a11-4fd2-a60c-bfbed407fd69",
+          "name": "Get episode credits",
+          "request": {
+            "name": "Get episode credits",
+            "description": {
+              "content": "Cast, crew and guest stars of the episode.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "episode",
+                ":episode_number",
+                "credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "episode_number",
+                  "description": "(Required) Episode number inside the season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1921961b-8ccb-4818-a4fa-506f332fef34",
+          "name": "Get episode external ids",
+          "request": {
+            "name": "Get episode external ids",
+            "description": {
+              "content": "External ids of the episode.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "episode",
+                ":episode_number",
+                "external_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "episode_number",
+                  "description": "(Required) Episode number inside the season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd0201ed-8957-4dca-a2f6-43150ea5a0ea",
+          "name": "Get episode images",
+          "request": {
+            "name": "Get episode images",
+            "description": {
+              "content": "Stills of the episode.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "episode",
+                ":episode_number",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_image_language",
+                  "value": "en,null",
+                  "description": "Comma separated language codes to keep, for example en,null. Add null for images without text."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "episode_number",
+                  "description": "(Required) Episode number inside the season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3fbadd2e-71e1-4809-a302-51acf95a85fa",
+          "name": "Get episode videos",
+          "request": {
+            "name": "Get episode videos",
+            "description": {
+              "content": "Videos of the episode.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "episode",
+                ":episode_number",
+                "videos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_video_language",
+                  "value": "en",
+                  "description": "Comma separated language codes to keep, for example en,ru."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "episode_number",
+                  "description": "(Required) Episode number inside the season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "817f3bc6-0397-44bd-a208-25ad2eaa8e6f",
+          "name": "Get episode translations",
+          "request": {
+            "name": "Get episode translations",
+            "description": {
+              "content": "Translated names and overviews.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "season",
+                ":season_number",
+                "episode",
+                ":episode_number",
+                "translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "season_number",
+                  "description": "(Required) Season number. 0 is the specials season."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "episode_number",
+                  "description": "(Required) Episode number inside the season."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b0ba7461-fe89-4613-a4bb-7c82059b3f64",
+      "name": "People",
+      "description": {
+        "content": "Person details, credits and popular people.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "df18f832-d7d4-4f30-a0dc-a4bbf44d107b",
+          "name": "List popular people",
+          "request": {
+            "name": "List popular people",
+            "description": {
+              "content": "People ranked by current popularity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                "popular"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eddfa799-6c7c-4696-a1d9-b8b83c4c7172",
+          "name": "Get person details",
+          "request": {
+            "name": "Get person details",
+            "description": {
+              "content": "Returns one person. Merge sub requests with `append_to_response`, for example `combined_credits`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "append_to_response",
+                  "value": "credits,images",
+                  "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6d4d9f7b-635d-4ceb-a86f-b884b4e94189",
+          "name": "Get combined credits",
+          "request": {
+            "name": "Get combined credits",
+            "description": {
+              "content": "Movie and TV credits of the person.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id",
+                "combined_credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1066799e-9876-4c58-a5f5-d004bc0d08c3",
+          "name": "Get movie credits",
+          "request": {
+            "name": "Get movie credits",
+            "description": {
+              "content": "Movie credits of the person.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id",
+                "movie_credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5883b5b7-10ef-48b7-a177-7d22c702255a",
+          "name": "Get TV credits",
+          "request": {
+            "name": "Get TV credits",
+            "description": {
+              "content": "TV credits of the person.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id",
+                "tv_credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2329776b-4990-438f-a14b-f616ac576763",
+          "name": "Get external ids",
+          "request": {
+            "name": "Get external ids",
+            "description": {
+              "content": "External ids of the person, such as the IMDb id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id",
+                "external_ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "518946a2-e66d-49bf-ab00-c7b96d0905f2",
+          "name": "Get images",
+          "request": {
+            "name": "Get images",
+            "description": {
+              "content": "Profile images of the person.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7f013063-9aa0-43a7-ae18-620979d2cfc2",
+          "name": "Get translations",
+          "request": {
+            "name": "Get translations",
+            "description": {
+              "content": "Translated biographies.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "person",
+                ":person_id",
+                "translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "287",
+                  "key": "person_id",
+                  "description": "(Required) Person id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f6aa2871-4f04-4ad8-a4db-c073eb5ea423",
+      "name": "Search",
+      "description": {
+        "content": "Text search across movies, shows, people, collections, companies and keywords.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "70e841d0-c7b9-4bc6-aec4-d6e1cf31d497",
+          "name": "Search movies",
+          "request": {
+            "name": "Search movies",
+            "description": {
+              "content": "Finds movies by title.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "movie"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                },
+                {
+                  "disabled": true,
+                  "key": "year",
+                  "value": "2010",
+                  "description": "Release year."
+                },
+                {
+                  "disabled": true,
+                  "key": "primary_release_year",
+                  "value": "2010",
+                  "description": "Year of the first release."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7b1b9eec-6ef3-4270-a6a9-c0579c28e5d7",
+          "name": "Search TV shows",
+          "request": {
+            "name": "Search TV shows",
+            "description": {
+              "content": "Finds TV shows by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "tv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "first_air_date_year",
+                  "value": "2011",
+                  "description": "Year of the first air date."
+                },
+                {
+                  "disabled": true,
+                  "key": "year",
+                  "value": "2010",
+                  "description": "Year of any air date."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae36be3d-5ae2-4c99-aa66-4a0d7fa05950",
+          "name": "Search people",
+          "request": {
+            "name": "Search people",
+            "description": {
+              "content": "Finds people by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "person"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "676125e8-8ffb-4c39-a7c9-bf538558439a",
+          "name": "Search movies, shows and people",
+          "request": {
+            "name": "Search movies, shows and people",
+            "description": {
+              "content": "Searches all three kinds at once. Check media_type on each result.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "multi"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ff557e84-53d3-4d1d-a7a3-0085e8f0305e",
+          "name": "Search collections",
+          "request": {
+            "name": "Search collections",
+            "description": {
+              "content": "Finds collections by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "collection"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a872f6d-b552-4ca3-a84d-a357b464cdf5",
+          "name": "Search companies",
+          "request": {
+            "name": "Search companies",
+            "description": {
+              "content": "Finds companies by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "company"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "01912b58-891c-41f8-a63f-558e1b8c65ff",
+          "name": "Search keywords",
+          "request": {
+            "name": "Search keywords",
+            "description": {
+              "content": "Finds keywords by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "search",
+                "keyword"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "inception",
+                  "description": "(Required) Text to search for."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a44f74d7-742f-417a-a5ed-60438b8139a6",
+      "name": "Discover",
+      "description": {
+        "content": "Filtered and sorted lists of movies and shows.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "85a5f679-d84e-440c-a891-188bc37d568b",
+          "name": "Discover movies",
+          "request": {
+            "name": "Discover movies",
+            "description": {
+              "content": "Filters and sorts movies. All filters are optional.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "discover",
+                "movie"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "certification",
+                  "value": "R",
+                  "description": "Certification to match. Needs certification_country."
+                },
+                {
+                  "disabled": true,
+                  "key": "certification.gte",
+                  "value": "PG",
+                  "description": "Certification greater than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "certification.lte",
+                  "value": "R",
+                  "description": "Certification less than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "certification_country",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code of the certification."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_video",
+                  "value": "false",
+                  "description": "Include entries marked as video."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "primary_release_year",
+                  "value": "2010",
+                  "description": "Year of the first release."
+                },
+                {
+                  "disabled": true,
+                  "key": "primary_release_date.gte",
+                  "value": "2025-01-01",
+                  "description": "First release on or after this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "primary_release_date.lte",
+                  "value": "2025-01-01",
+                  "description": "First release on or before this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows release dates and lists, for example US."
+                },
+                {
+                  "disabled": true,
+                  "key": "release_date.gte",
+                  "value": "2025-01-01",
+                  "description": "Release on or after this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "release_date.lte",
+                  "value": "2025-01-01",
+                  "description": "Release on or before this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "sort_by",
+                  "value": "popularity.desc",
+                  "description": "Sort order."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_average.gte",
+                  "value": "7",
+                  "description": "Vote average greater than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_average.lte",
+                  "value": "9",
+                  "description": "Vote average less than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_count.gte",
+                  "value": "100",
+                  "description": "Vote count greater than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_count.lte",
+                  "value": "10000",
+                  "description": "Vote count less than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "watch_region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code for the watch provider filters."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_cast",
+                  "value": "287",
+                  "description": "Person ids in the cast. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_companies",
+                  "value": "1",
+                  "description": "Company ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_crew",
+                  "value": "7467",
+                  "description": "Person ids in the crew. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_genres",
+                  "value": "18",
+                  "description": "Genre ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_keywords",
+                  "value": "818",
+                  "description": "Keyword ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_origin_country",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code of origin."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_original_language",
+                  "value": "en",
+                  "description": "ISO 639-1 original language code."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_people",
+                  "value": "287",
+                  "description": "Person ids in the cast or crew. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_release_type",
+                  "value": "2|3",
+                  "description": "Release types to match, for example 2|3. Same codes as release_dates."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_runtime.gte",
+                  "value": "90",
+                  "description": "Runtime in minutes, at least."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_runtime.lte",
+                  "value": "180",
+                  "description": "Runtime in minutes, at most."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_watch_monetization_types",
+                  "value": "flatrate",
+                  "description": "Offer types: flatrate, free, ads, rent or buy. Needs watch_region."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_watch_providers",
+                  "value": "8",
+                  "description": "Watch provider ids. Needs watch_region. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_companies",
+                  "value": "1",
+                  "description": "Company ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_genres",
+                  "value": "27",
+                  "description": "Genre ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_keywords",
+                  "value": "818",
+                  "description": "Keyword ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_watch_providers",
+                  "value": "8",
+                  "description": "Watch provider ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "year",
+                  "value": "2010",
+                  "description": "Release year."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f0eafcb7-7419-4ea4-a2ab-e736db39dbd2",
+          "name": "Discover TV shows",
+          "request": {
+            "name": "Discover TV shows",
+            "description": {
+              "content": "Filters and sorts TV shows. All filters are optional.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "discover",
+                "tv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "air_date.gte",
+                  "value": "2025-01-01",
+                  "description": "An episode aired on or after this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "air_date.lte",
+                  "value": "2025-01-01",
+                  "description": "An episode aired on or before this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "first_air_date.gte",
+                  "value": "2025-01-01",
+                  "description": "First aired on or after this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "first_air_date.lte",
+                  "value": "2025-01-01",
+                  "description": "First aired on or before this date."
+                },
+                {
+                  "disabled": true,
+                  "key": "first_air_date_year",
+                  "value": "2011",
+                  "description": "Year of the first air date."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_null_first_air_dates",
+                  "value": "false",
+                  "description": "Include shows without a first air date."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                },
+                {
+                  "disabled": true,
+                  "key": "screened_theatrically",
+                  "value": "true",
+                  "description": "Only shows with an episode screened in cinemas."
+                },
+                {
+                  "disabled": true,
+                  "key": "sort_by",
+                  "value": "popularity.desc",
+                  "description": "Sort order."
+                },
+                {
+                  "disabled": true,
+                  "key": "timezone",
+                  "value": "America/New_York",
+                  "description": "IANA timezone that defines the day, for example America/New_York."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_average.gte",
+                  "value": "7",
+                  "description": "Vote average greater than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_average.lte",
+                  "value": "9",
+                  "description": "Vote average less than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_count.gte",
+                  "value": "100",
+                  "description": "Vote count greater than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "vote_count.lte",
+                  "value": "10000",
+                  "description": "Vote count less than or equal to this value."
+                },
+                {
+                  "disabled": true,
+                  "key": "watch_region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code for the watch provider filters."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_companies",
+                  "value": "1",
+                  "description": "Company ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_genres",
+                  "value": "18",
+                  "description": "Genre ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_keywords",
+                  "value": "818",
+                  "description": "Keyword ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_networks",
+                  "value": "49",
+                  "description": "Network ids. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_origin_country",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code of origin."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_original_language",
+                  "value": "en",
+                  "description": "ISO 639-1 original language code."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_runtime.gte",
+                  "value": "90",
+                  "description": "Episode runtime in minutes, at least."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_runtime.lte",
+                  "value": "180",
+                  "description": "Episode runtime in minutes, at most."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_status",
+                  "value": "3",
+                  "description": "Status ids: 0 returning, 1 planned, 2 in production, 3 ended, 4 canceled, 5 pilot."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_type",
+                  "value": "4",
+                  "description": "Type ids: 0 documentary, 1 news, 2 miniseries, 3 reality, 4 scripted, 5 talk show, 6 video."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_watch_monetization_types",
+                  "value": "flatrate",
+                  "description": "Offer types: flatrate, free, ads, rent or buy. Needs watch_region."
+                },
+                {
+                  "disabled": true,
+                  "key": "with_watch_providers",
+                  "value": "8",
+                  "description": "Watch provider ids. Needs watch_region. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_companies",
+                  "value": "1",
+                  "description": "Company ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_genres",
+                  "value": "27",
+                  "description": "Genre ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_keywords",
+                  "value": "818",
+                  "description": "Keyword ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                },
+                {
+                  "disabled": true,
+                  "key": "without_watch_providers",
+                  "value": "8",
+                  "description": "Watch provider ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "40f871c3-62f7-448a-ac2c-6940a9e16413",
+      "name": "Trending",
+      "description": {
+        "content": "Trending movies, shows and people.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bb25c2f1-ff28-4ba3-ab9d-3a191044d855",
+          "name": "Get trending titles",
+          "request": {
+            "name": "Get trending titles",
+            "description": {
+              "content": "Trending movies, shows or people for a day or a week. Check media_type on each result.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "trending",
+                ":media_type",
+                ":time_window"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "all",
+                  "key": "media_type",
+                  "description": "(Required) Kind of title to rank."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "day",
+                  "key": "time_window",
+                  "description": "(Required) Ranking window."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8a05a975-375a-4ab3-a05e-e7c75850425b",
+      "name": "Genres",
+      "description": {
+        "content": "Genre ids and names.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "db371e16-ead3-4582-a4ba-29764a21e241",
+          "name": "List movie genres",
+          "request": {
+            "name": "List movie genres",
+            "description": {
+              "content": "Genre ids and names used by movies.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "genre",
+                "movie",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9701e474-6eff-4a60-ae16-03124b3081cc",
+          "name": "List TV genres",
+          "request": {
+            "name": "List TV genres",
+            "description": {
+              "content": "Genre ids and names used by TV shows.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "genre",
+                "tv",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "73cc39b5-e7a0-49de-a739-bf62132866fa",
+      "name": "Collections",
+      "description": {
+        "content": "Movie collections.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a093c5ba-e652-465d-a21b-d69a5722ff47",
+          "name": "Get collection details",
+          "request": {
+            "name": "Get collection details",
+            "description": {
+              "content": "Returns one collection with its movies in the parts list.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "collection",
+                ":collection_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "10",
+                  "key": "collection_id",
+                  "description": "(Required) Collection id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8edc9c8f-6a2d-4cba-a4b2-5afef86cf144",
+          "name": "Get collection images",
+          "request": {
+            "name": "Get collection images",
+            "description": {
+              "content": "Posters and backdrops of the collection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "collection",
+                ":collection_id",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "include_image_language",
+                  "value": "en,null",
+                  "description": "Comma separated language codes to keep, for example en,null. Add null for images without text."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "10",
+                  "key": "collection_id",
+                  "description": "(Required) Collection id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0cfdc2a3-9305-4b43-a757-5d1c91077efa",
+          "name": "Get collection translations",
+          "request": {
+            "name": "Get collection translations",
+            "description": {
+              "content": "Translated names and overviews.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "collection",
+                ":collection_id",
+                "translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "10",
+                  "key": "collection_id",
+                  "description": "(Required) Collection id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "bd6828c7-5ce7-425e-a7b1-39a5133e1b87",
+      "name": "Companies",
+      "description": {
+        "content": "Production companies.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7f5a8a8e-cd6d-45af-a5af-392fadbfbce8",
+          "name": "Get company details",
+          "request": {
+            "name": "Get company details",
+            "description": {
+              "content": "Returns one production company.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "company",
+                ":company_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "company_id",
+                  "description": "(Required) Company id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8b9f5d8d-9b7c-498f-a375-0ab88b928e64",
+          "name": "Get alternative names",
+          "request": {
+            "name": "Get alternative names",
+            "description": {
+              "content": "Other names of the company.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "company",
+                ":company_id",
+                "alternative_names"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "company_id",
+                  "description": "(Required) Company id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2b42543e-9aa6-476d-a2a1-4f085c509b0a",
+          "name": "Get company images",
+          "request": {
+            "name": "Get company images",
+            "description": {
+              "content": "Logos of the company.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "company",
+                ":company_id",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "company_id",
+                  "description": "(Required) Company id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "6301649d-6936-41b1-a23b-36cac7404d18",
+      "name": "Networks",
+      "description": {
+        "content": "TV networks.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "53b638fa-2307-44c2-ab32-6b9bc928affb",
+          "name": "Get network details",
+          "request": {
+            "name": "Get network details",
+            "description": {
+              "content": "Returns one TV network.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "network",
+                ":network_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "network_id",
+                  "description": "(Required) Network id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2592fb4c-f155-45e6-a197-ddd9d57d2295",
+          "name": "Get alternative names",
+          "request": {
+            "name": "Get alternative names",
+            "description": {
+              "content": "Other names of the network.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "network",
+                ":network_id",
+                "alternative_names"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "network_id",
+                  "description": "(Required) Network id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "97f26fd1-1ed2-4648-a61d-ae38d80fb08c",
+          "name": "Get network images",
+          "request": {
+            "name": "Get network images",
+            "description": {
+              "content": "Logos of the network.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "network",
+                ":network_id",
+                "images"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "network_id",
+                  "description": "(Required) Network id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "821fae90-5f0e-4201-a5fb-3830836886e2",
+      "name": "Keywords",
+      "description": {
+        "content": "Keywords and the movies tagged with them.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "588b60fa-f2db-4c7a-ac88-1b46b6e5a54e",
+          "name": "Get keyword details",
+          "request": {
+            "name": "Get keyword details",
+            "description": {
+              "content": "Returns the name of one keyword.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "keyword",
+                ":keyword_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "818",
+                  "key": "keyword_id",
+                  "description": "(Required) Keyword id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ec69f849-8a83-46d8-a2ec-ee34d346f74b",
+          "name": "Get movies with a keyword",
+          "request": {
+            "name": "Get movies with a keyword",
+            "description": {
+              "content": "Movies tagged with the keyword.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "keyword",
+                ":keyword_id",
+                "movies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "include_adult",
+                  "value": "false",
+                  "description": "Include adult titles in the results."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number. Lists have at most 500 pages."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "818",
+                  "key": "keyword_id",
+                  "description": "(Required) Keyword id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "760b1aa1-4af9-428b-af29-f3fe7c55c3c3",
+      "name": "Find",
+      "description": {
+        "content": "Look up titles by an id from another system.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6feebe08-33ed-4236-a1c2-a26fdb89e6e3",
+          "name": "Find by external id",
+          "request": {
+            "name": "Find by external id",
+            "description": {
+              "content": "Finds movies, shows, seasons, episodes and people by an id from another system. amodb accepts `imdb_id`, `tvdb_id`, `wikidata_id` and `kinopoisk_id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "find",
+                ":external_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "external_source",
+                  "value": "imdb_id",
+                  "description": "(Required) System the id belongs to."
+                },
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "tt0137523",
+                  "key": "external_id",
+                  "description": "(Required) Id in the system named by external_source, for example tt0137523."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e635015c-d153-4286-a88e-425ba5b4a2b1",
+      "name": "Configuration",
+      "description": {
+        "content": "Image base URLs, size lists and reference data.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "50fa0643-78ef-4209-ae8f-0260e8267ab3",
+          "name": "Get configuration",
+          "request": {
+            "name": "Get configuration",
+            "description": {
+              "content": "Image base URLs and size lists. images.secure_base_url is https://img.amodb.dev/t/p/. Append a size and a file_path.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0936fd99-0601-4e7c-af42-e867fa862398",
+          "name": "List countries",
+          "request": {
+            "name": "List countries",
+            "description": {
+              "content": "Countries with ISO 3166-1 codes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "configuration",
+                "countries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5bad3973-94a5-4a5f-ab40-de07a1243c06",
+          "name": "List jobs",
+          "request": {
+            "name": "List jobs",
+            "description": {
+              "content": "Crew departments and their jobs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "configuration",
+                "jobs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "03e7e5ad-cd42-41a2-aea6-c94fb67ffe19",
+          "name": "List languages",
+          "request": {
+            "name": "List languages",
+            "description": {
+              "content": "Languages with ISO 639-1 codes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "configuration",
+                "languages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cac9a269-410a-434d-af1e-ae92f594938e",
+          "name": "List primary translations",
+          "request": {
+            "name": "List primary translations",
+            "description": {
+              "content": "Language and country tags used for translations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "configuration",
+                "primary_translations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d697a9a5-9e91-477e-ad65-2ed2e2e118bf",
+          "name": "List timezones",
+          "request": {
+            "name": "List timezones",
+            "description": {
+              "content": "Timezones by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "configuration",
+                "timezones"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "54825dbe-7af3-467c-a9d5-fa21ac707113",
+      "name": "Certifications",
+      "description": {
+        "content": "Age rating lists by country.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "16299131-4f8a-4679-a5b1-fc1df7d60099",
+          "name": "List movie certifications",
+          "request": {
+            "name": "List movie certifications",
+            "description": {
+              "content": "Movie age ratings by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "certification",
+                "movie",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f85a8f7b-cae7-4648-a5ce-16b0dc534cc2",
+          "name": "List TV certifications",
+          "request": {
+            "name": "List TV certifications",
+            "description": {
+              "content": "TV age ratings by country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "certification",
+                "tv",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "0d0c5d2f-3605-4233-a1de-0d01be6bf0fb",
+      "name": "Watch providers",
+      "description": {
+        "content": "Provider catalogs and regions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "828b854a-71a6-4189-a391-6d602ff50eaa",
+          "name": "List watch provider regions",
+          "request": {
+            "name": "List watch provider regions",
+            "description": {
+              "content": "Countries that have watch provider data.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "watch",
+                "providers",
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "72c3bfef-45ba-4614-a4d6-27b834e01292",
+          "name": "List movie watch providers",
+          "request": {
+            "name": "List movie watch providers",
+            "description": {
+              "content": "Providers that offer movies.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "watch",
+                "providers",
+                "movie"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "watch_region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows the list."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ebc9f961-a657-44f0-a6ba-08b660df3441",
+          "name": "List TV watch providers",
+          "request": {
+            "name": "List TV watch providers",
+            "description": {
+              "content": "Providers that offer TV shows.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "watch",
+                "providers",
+                "tv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                },
+                {
+                  "disabled": true,
+                  "key": "watch_region",
+                  "value": "US",
+                  "description": "ISO 3166-1 country code that narrows the list."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "2f59d023-d689-41c2-a69e-4bdac755582b",
+      "name": "Reviews",
+      "description": {
+        "content": "Single review lookup.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "76741dde-95f2-4fc3-a169-e119bdd682e6",
+          "name": "Get review details",
+          "request": {
+            "name": "Get review details",
+            "description": {
+              "content": "Returns one review with the title it belongs to.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "review",
+                ":review_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "5a64d1ce9251417d7c01a2ae",
+                  "key": "review_id",
+                  "description": "(Required) Review id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "60293106-8ef4-4e2b-a337-d29153a45f8e",
+      "name": "Credits",
+      "description": {
+        "content": "Single credit lookup.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "805869f2-b516-4062-a066-62c0f5f317df",
+          "name": "Get credit details",
+          "request": {
+            "name": "Get credit details",
+            "description": {
+              "content": "Returns one credit with the person and the title.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "credit",
+                ":credit_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "language",
+                  "value": "en-US",
+                  "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "52fe4250c3a36847f80149f3",
+                  "key": "credit_id",
+                  "description": "(Required) Credit id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "77eae4e0-85c9-4675-af8b-e6640c80d353",
+      "name": "Extensions",
+      "description": {
+        "content": "Routes that exist only in amodb: `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0cb1227d-3ee9-4460-a084-a7805fbdc547",
+          "name": "Get movie moods",
+          "request": {
+            "name": "Get movie moods",
+            "description": {
+              "content": "Mood meters of the movie. Also available as `append_to_response=moods`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "moods"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d512b9c3-5959-4661-af6f-52d33ff7bc04",
+          "name": "Get movie soundtracks",
+          "request": {
+            "name": "Get movie soundtracks",
+            "description": {
+              "content": "Soundtrack listing of the movie. Also available as `append_to_response=soundtracks`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "soundtracks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3ff11c59-d2ff-47bd-a7ce-8330ac5e4ee0",
+          "name": "Get movie ratings",
+          "request": {
+            "name": "Get movie ratings",
+            "description": {
+              "content": "Ratings of the movie from several providers. A provider without data is null. Also available as `append_to_response=ratings`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "ratings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d605b43b-7676-437a-a37e-08d65bad59e7",
+          "name": "Get movie linked data facts",
+          "request": {
+            "name": "Get movie linked data facts",
+            "description": {
+              "content": "Selected facts about the movie. Also available as `append_to_response=wikidata`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "wikidata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "adf99914-f451-4b34-a6b7-5488a1052cc1",
+          "name": "Get TV show moods",
+          "request": {
+            "name": "Get TV show moods",
+            "description": {
+              "content": "Mood meters of the TV show. Also available as `append_to_response=moods`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "moods"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9691efbd-93de-412e-acdd-0ef97abd6265",
+          "name": "Get TV show soundtracks",
+          "request": {
+            "name": "Get TV show soundtracks",
+            "description": {
+              "content": "Soundtrack listing of the TV show. Also available as `append_to_response=soundtracks`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "soundtracks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af9b8a25-05ef-4f85-a47d-913df5dc6c59",
+          "name": "Get TV show ratings",
+          "request": {
+            "name": "Get TV show ratings",
+            "description": {
+              "content": "Ratings of the TV show from several providers. A provider without data is null. Also available as `append_to_response=ratings`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "ratings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5b1fe065-7cb5-439d-a143-9a5af9e7f9e0",
+          "name": "Get TV show linked data facts",
+          "request": {
+            "name": "Get TV show linked data facts",
+            "description": {
+              "content": "Selected facts about the TV show. Also available as `append_to_response=wikidata`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "tv",
+                ":series_id",
+                "wikidata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1399",
+                  "key": "series_id",
+                  "description": "(Required) TV show id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "522ee2ae-cf45-4935-a9c7-fddfeac66295",
+          "name": "Get movie showtimes",
+          "request": {
+            "name": "Get movie showtimes",
+            "description": {
+              "content": "Cinema showtimes for one country when known. Also available as `append_to_response=showtimes`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "3",
+                "movie",
+                ":movie_id",
+                "showtimes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "country",
+                  "value": "US",
+                  "description": "(Required) ISO 3166-1 country code."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "550",
+                  "key": "movie_id",
+                  "description": "(Required) Movie id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "cdfc8ede-a821-4b76-aafa-5f6fc1adda3a",
+      "name": "OMDb",
+      "description": {
+        "content": "OMDb compatible lookup and search.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "63b904f1-2618-429f-ab40-d749e46be081",
+          "name": "Look up or search titles",
+          "request": {
+            "name": "Look up or search titles",
+            "description": {
+              "content": "OMDb compatible route. Send i for an IMDb id, t for a title, or s to search. Every value in the response is a string. A lookup that finds nothing returns HTTP 200 with Response False. The trailing slash is optional.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "omdb",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "i",
+                  "value": "tt0137523",
+                  "description": "IMDb id. Returns one title."
+                },
+                {
+                  "disabled": true,
+                  "key": "t",
+                  "value": "Fight Club",
+                  "description": "Title to look up. Returns one title."
+                },
+                {
+                  "disabled": true,
+                  "key": "s",
+                  "value": "inception",
+                  "description": "Title to search for. Returns a page of results."
+                },
+                {
+                  "disabled": true,
+                  "key": "type",
+                  "value": "movie",
+                  "description": "Kind of title."
+                },
+                {
+                  "disabled": true,
+                  "key": "y",
+                  "value": "1999",
+                  "description": "Release year."
+                },
+                {
+                  "disabled": true,
+                  "key": "plot",
+                  "value": "short",
+                  "description": "Length of the Plot field."
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page of search results. Used with s."
+                },
+                {
+                  "disabled": true,
+                  "key": "r",
+                  "value": "json",
+                  "description": "Response format. Only json is offered. xml returns 400."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "apikey"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "query"
+                }
+              ]
+            }
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "fcbb8356-2e9d-4d36-afc3-d12b86e1f61d",
+      "name": "Images",
+      "description": {
+        "content": "Image files on the image host.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3ba448c5-9031-4c29-a0a1-9edda835cbc8",
+          "name": "Get an image",
+          "request": {
+            "name": "Get an image",
+            "description": {
+              "content": "Serves an image on the img.amodb.dev host. No key is needed. Build the path from images.secure_base_url in /3/configuration, a size and the file_path of an image without its leading slash.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "t",
+                "p",
+                ":size",
+                ":file"
+              ],
+              "host": [
+                "{{imageBaseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "w500",
+                  "key": "size",
+                  "description": "(Required) Image size. w is the width in pixels, h632 is the height, original is the source file."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+                  "key": "file",
+                  "description": "(Required) File name from a file_path, without the leading slash."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "image/jpeg"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b93419fc-59d5-4487-a2bc-3b3b3fb40138",
+      "name": "Plans",
+      "description": {
+        "content": "Public list of plans and prices.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "23d97376-dc4b-470f-ae88-07594a39e578",
+          "name": "List plans",
+          "request": {
+            "name": "List plans",
+            "description": {
+              "content": "Public list of plans, billing periods and prices. No key is needed. The example values are illustrative. Live names and prices come from this endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "plans"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.amodb.dev",
+      "type": "string"
+    },
+    {
+      "key": "apiKey",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "imageBaseUrl",
+      "value": "https://img.amodb.dev",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{apiKey}}",
+        "type": "string"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3b563829-704d-414c-a5a5-c552691f4f73",
+    "name": "amodb API",
+    "description": {
+      "content": "amodb is a paid API for movie and TV metadata. It is compatible with TMDB v3 and OMDb.\n\nExisting TMDB clients work by changing the base URL to `https://api.amodb.dev/3`. Paths, query parameters and JSON shapes match the TMDB v3 read endpoints.\n\n## Access\n\namodb is a paid API. Get a key at https://amodb.dev/pricing. A key is 32 lowercase hex characters.\n\n- TMDB style routes: send `Authorization: Bearer KEY` or add `?api_key=KEY`.\n- OMDb route: add `apikey=KEY`.\n- Images and plans need no key.\n\n## Rate limits\n\nPlans differ only in requests per minute. Every plan gets all data. There is no free tier and no trial.\n\n| Plan id | Requests per minute |\n|---|---|\n| lite | 20 |\n| pro | 40 |\n| proplus | 120 |\n\nEvery keyed response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). A 429 adds `Retry-After`. Live plan names and prices come from `GET /plans`.\n\n## Languages\n\n`language` accepts TMDB tags such as `ru-RU` or `pt-BR`. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.\n\n## Errors\n\nTMDB style routes return `{\"success\": false, \"status_code\": N, \"status_message\": \"...\"}`. The OMDb route returns `{\"Response\": \"False\", \"Error\": \"...\"}`.\n\n## Write methods\n\nTMDB write methods (account, session, rating and list writes) are not offered. They return 405 with status_code 37.\n\n## Images\n\n`GET /3/configuration` returns `images.secure_base_url`, which is `https://img.amodb.dev/t/p/`. Append a size and a `file_path` to build an image URL.\n\n## Extensions\n\namodb adds `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`. Each has its own route and an `append_to_response` value. `/3/find/{external_id}` also accepts `tvdb_id`, `wikidata_id` and `kinopoisk_id`.",
+      "type": "text/markdown"
+    },
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  }
+}

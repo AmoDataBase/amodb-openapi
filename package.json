@@ -1,0 +1,46 @@
+{
+  "name": "amodb-openapi",
+  "version": "0.1.0",
+  "description": "OpenAPI 3.1 specification for the amodb API, with Postman and Insomnia collections.",
+  "license": "MIT",
+  "author": "amodb",
+  "homepage": "https://amodb.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netlistenany-bot/amodb-openapi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/netlistenany-bot/amodb-openapi/issues"
+  },
+  "keywords": [
+    "amodb",
+    "openapi",
+    "openapi-3-1",
+    "tmdb",
+    "omdb",
+    "movie-api",
+    "tv-api",
+    "postman-collection",
+    "api-specification"
+  ],
+  "type": "module",
+  "files": [
+    "openapi.yaml",
+    "postman_collection.json",
+    "insomnia_export.json"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint": "redocly lint openapi.yaml",
+    "build:postman": "node scripts/build-postman.mjs",
+    "build:insomnia": "node scripts/build-insomnia.mjs",
+    "build:docs": "redocly build-docs openapi.yaml -o dist/index.html",
+    "check": "npm run lint && npm run build:postman && npm run build:insomnia"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^2.64.1",
+    "openapi-to-postmanv2": "^6.4.0"
+  }
+}

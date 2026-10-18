@@ -1,0 +1,7 @@
+extends:
+  - recommended
+
+rules:
+  # The OMDb compatible route is served at /omdb/ and the slash is optional.
+  # The path is documented with the slash because OMDb clients send it that way.
+  no-path-trailing-slash: off
