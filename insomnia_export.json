@@ -9,7 +9,7 @@
       "_type": "workspace",
       "parentId": null,
       "name": "amodb API",
-      "description": "amodb is a paid API for movie and TV metadata. It is compatible with TMDB v3 and OMDb.\n\nExisting TMDB clients work by changing the base URL to `https://api.amodb.dev/3`. Paths, query parameters and JSON shapes match the TMDB v3 read endpoints.\n\n## Access\n\namodb is a paid API. Get a key at https://amodb.dev/pricing. A key is 32 lowercase hex characters.\n\n- TMDB style routes: send `Authorization: Bearer KEY` or add `?api_key=KEY`.\n- OMDb route: add `apikey=KEY`.\n- Images and plans need no key.\n\n## Rate limits\n\nPlans differ only in requests per minute. Every plan gets all data. There is no free tier and no trial.\n\n| Plan id | Requests per minute |\n|---|---|\n| lite | 20 |\n| pro | 40 |\n| proplus | 120 |\n\nEvery keyed response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). A 429 adds `Retry-After`. Live plan names and prices come from `GET /plans`.\n\n## Languages\n\n`language` accepts TMDB tags such as `ru-RU` or `pt-BR`. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.\n\n## Errors\n\nTMDB style routes return `{\"success\": false, \"status_code\": N, \"status_message\": \"...\"}`. The OMDb route returns `{\"Response\": \"False\", \"Error\": \"...\"}`.\n\n## Write methods\n\nTMDB write methods (account, session, rating and list writes) are not offered. They return 405 with status_code 37.\n\n## Images\n\n`GET /3/configuration` returns `images.secure_base_url`, which is `https://img.amodb.dev/t/p/`. Append a size and a `file_path` to build an image URL.\n\n## Extensions\n\namodb adds `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`. Each has its own route and an `append_to_response` value. `/3/find/{external_id}` also accepts `tvdb_id`, `wikidata_id` and `kinopoisk_id`.",
+      "description": "amodb is a paid API for movie and TV metadata. It is compatible with TMDB v3 and OMDb.\n\nExisting TMDB clients work by changing the base URL to `https://api.amodb.dev/3`. Paths, query parameters and JSON shapes match the TMDB v3 read endpoints that amodb offers. A few TMDB routes are not offered, see Routes that are not offered below.\n\n## Access\n\namodb is a paid API. Get a key at https://amodb.dev/pricing. A key is 32 lowercase hex characters.\n\n- TMDB style routes: send `Authorization: Bearer KEY` or add `?api_key=KEY`.\n- OMDb route: add `apikey=KEY`.\n- Images and plans need no key.\n\n## Rate limits\n\nPlans differ only in requests per minute. Every plan gets all data. There is no free tier and no trial.\n\n| Plan id | Requests per minute |\n|---|---|\n| lite | 20 |\n| pro | 40 |\n| proplus | 120 |\n\nEvery keyed response carries `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (seconds). A 429 adds `Retry-After`. Live plan names and prices come from `GET /plans`.\n\n## Languages\n\n`language` accepts TMDB tags such as `ru-RU` or `pt-BR`. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. A bare code works, the legacy code iw maps to he, and any other value falls back to en. Only some endpoints read `language`. Each operation lists the parameters it really uses.\n\n## Lists and paging\n\n`page` runs from 1 to 500. Lists and search return 20 items per page.\n\n## Errors\n\nTMDB style routes return `{\"success\": false, \"status_code\": N, \"status_message\": \"...\"}`. The codes are 7 and 10 (key), 11 (internal), 22 (bad parameters, HTTP 400), 24 (timeout), 25 (rate limit), 34 (not found, HTTP 404), 36 (plan expired) and 37 (not offered, HTTP 405). The OMDb route returns `{\"Response\": \"False\", \"Error\": \"...\"}`, usually with HTTP 200.\n\n## Routes that are not offered\n\nThese TMDB routes answer 405 with status_code 37 and the message \"This method is not offered by amodb.\": everything under `account`, `authentication`, `guest_session` and `list`, and any path that ends in `/account_states` or `/rating`. Write methods never work.\n\nThese TMDB routes answer 404 with status_code 34, as does any other unknown path:\n\n- `aggregate_credits` of movies, shows and seasons\n- `changes` of movies, shows and people\n- `/person/{id}/translations`, `/person/latest` and `/person/{id}/tagged_images`\n- `/credit/{credit_id}`, `/review/{review_id}` and `/tv/episode_group/{id}`\n- `images`, `translations` and `alternative_names` of collections, companies and networks\n- `/tv/{id}/screened_theatrically` and `/configuration/timezones`\n- `content_ratings` of a movie and `release_dates` of a TV show\n\n`append_to_response` silently ignores a name it does not know, so `aggregate_credits` and `changes` have no effect there. `include_adult` is ignored because adult titles and people are never served and answer 404.\n\n## Data limits\n\n- Reviews are loaded on demand. Many titles have none, and the list is then empty.\n- Season `images`, `videos` and `translations` are empty. Season and episode `external_ids` are all null.\n- TV show details have no `type` field, and `created_by` is empty for most shows.\n- Company `description` is empty and `parent_company` is null.\n\n## Images\n\n`GET /3/configuration` returns `images.secure_base_url`, which is `https://img.amodb.dev/t/p/`. Append a size and a `file_path` to build an image URL.\n\n## Extensions\n\namodb adds `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes` for movies and TV shows. Each has its own route and an `append_to_response` value. Appended `moods`, `soundtracks` and `ratings` have no `id`. Appended `wikidata` and `showtimes` keep it. `/3/find/{external_id}` also accepts `kinopoisk_id`, and `external_ids` of movies and shows carry `kinopoisk_id` when it is known.\n\n## Caching\n\nResponses carry `Cache-Control`. Details, credits and sub resources are cached for 6 hours, showtimes for 30 minutes, lists, trending and discover for 30 minutes, search for 10 minutes, configuration, genres and provider lists for 24 hours, and the latest movie for 10 minutes.",
       "scope": "collection",
       "created": 1792281600000,
       "modified": 1792281600000
@@ -42,7 +42,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Movies",
-      "description": "Movie details and the data attached to a movie.",
+      "description": "Movie details, the data attached to a movie, and the newest movie.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 1000,
@@ -54,7 +54,7 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get movie details",
-      "description": "Returns one movie. Merge sub requests with `append_to_response`, for example `credits,images`. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+      "description": "Returns one movie. Merge sub requests with `append_to_response`, for example `credits,external_ids`. The standard names are credits, images, videos, keywords, translations, external_ids, similar, recommendations, reviews, release_dates, watch/providers, alternative_titles and lists. amodb adds `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`. Appended `moods`, `soundtracks` and `ratings` have no `id`. Appended `wikidata` and `showtimes` keep it. Adult titles answer 404.",
       "url": "{{ _.baseUrl }}/3/movie/550",
       "method": "GET",
       "body": {},
@@ -63,14 +63,14 @@
           "id": "pair_8e601fa588ef9ab5c4dac4a6c079da58",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_92443fa18be890c94de2b91b60156ba9",
           "name": "append_to_response",
-          "value": "credits,images",
-          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "value": "credits,external_ids",
+          "description": "Comma separated sub requests merged into the response, at most 20. Allowed names for a movie: credits, images, videos, keywords, translations, external_ids, similar, recommendations, reviews, release_dates, watch/providers, alternative_titles, lists, moods, soundtracks, ratings, wikidata, showtimes. A name that is not in this list is ignored. Each appended section has the shape of its own endpoint. The id is dropped from every appended section except wikidata and showtimes, which keep it.",
           "disabled": true
         }
       ],
@@ -101,19 +101,11 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get alternative titles",
-      "description": "Titles of the movie in other countries.",
+      "description": "Titles of the movie in other countries. Often empty.",
       "url": "{{ _.baseUrl }}/3/movie/550/alternative_titles",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_00c5efab848725a51c5e7a6fdabd1467",
-          "name": "country",
-          "value": "US",
-          "description": "ISO 3166-1 country code that narrows the list.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -150,7 +142,7 @@
           "id": "pair_f69d848ef4ed96e2b7abf68afc324df9",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -181,7 +173,7 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get external ids",
-      "description": "External ids of the movie, such as the IMDb id.",
+      "description": "External ids of the movie. kinopoisk_id is present when the Kinopoisk id is known.",
       "url": "{{ _.baseUrl }}/3/movie/550/external_ids",
       "method": "GET",
       "body": {},
@@ -213,23 +205,16 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get images",
-      "description": "Posters, backdrops and logos.",
+      "description": "Posters, backdrops and logos. Use include_image_language to keep some languages.",
       "url": "{{ _.baseUrl }}/3/movie/550/images",
       "method": "GET",
       "body": {},
       "parameters": [
         {
-          "id": "pair_c7d35841111e4d5af5edbb31e40a2769",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
           "id": "pair_a5974bfe55f8052debdcc966a4a177b1",
           "name": "include_image_language",
           "value": "en,null",
-          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
+          "description": "Comma separated two letter language codes to keep, for example en,null. Add null for images without text. All languages are returned when it is missing. The language parameter does not filter images.",
           "disabled": true
         }
       ],
@@ -292,7 +277,7 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get recommendations",
-      "description": "Movies recommended for this movie.",
+      "description": "Movies recommended for this movie. One page of 20, without an id.",
       "url": "{{ _.baseUrl }}/3/movie/550/recommendations",
       "method": "GET",
       "body": {},
@@ -301,14 +286,7 @@
           "id": "pair_2896e47d68a6dd0074ca34b9196b3a86",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_165bb7d5686235cbbe7d4907529d3144",
-          "name": "page",
-          "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -339,7 +317,7 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get release dates",
-      "description": "Release dates and certifications by country.",
+      "description": "Release dates and certifications by country. Movies only.",
       "url": "{{ _.baseUrl }}/3/movie/550/release_dates",
       "method": "GET",
       "body": {},
@@ -371,26 +349,11 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get reviews",
-      "description": "User reviews of the movie.",
+      "description": "User reviews of the movie. They are loaded on demand, so many titles have none and the list is empty.",
       "url": "{{ _.baseUrl }}/3/movie/550/reviews",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_0d28f81541e82fc5bab11abf121f35d2",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_33198aea9efb02f0c79c6ba45b1f707e",
-          "name": "page",
-          "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -418,7 +381,7 @@
       "_type": "request",
       "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
       "name": "Get similar movies",
-      "description": "Movies with similar genres and keywords.",
+      "description": "Movies with similar genres and keywords. One page of 20, without an id.",
       "url": "{{ _.baseUrl }}/3/movie/550/similar",
       "method": "GET",
       "body": {},
@@ -427,14 +390,7 @@
           "id": "pair_c48443e6dac1f73154591fc690e37e7c",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_e5f0a07104da65876b7e110632d734aa",
-          "name": "page",
-          "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -501,22 +457,7 @@
       "url": "{{ _.baseUrl }}/3/movie/550/videos",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_47776521bcbc8acfdc100a0c47eae2b2",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_e3f9558fe5c8a818f6172507651633c4",
-          "name": "include_video_language",
-          "value": "en",
-          "description": "Comma separated language codes to keep, for example en,ru.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -585,14 +526,14 @@
           "id": "pair_1a206b04af3dbe479ee61a171f6713d6",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_5b226bfce3435034fec593932f81fbdc",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -608,6 +549,38 @@
         "prefix": ""
       },
       "metaSortKey": 1400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
+      "_id": "req_25dbdcb4c4a2b62c2439514f09622eb4",
+      "_type": "request",
+      "parentId": "fld_d301bc43b0a4844d6881d149b4498d25",
+      "name": "Get the newest movie",
+      "description": "The newest movie in the catalog: the highest id that is not adult. Same shape as movie details. Cached for 10 minutes.",
+      "url": "{{ _.baseUrl }}/3/movie/latest",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1500,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -644,21 +617,21 @@
           "id": "pair_feb9b3925b13cdf7b6ab0bee2776923b",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_d520c00176fa50b46c4de0c5f6d7f818",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
           "id": "pair_df84600d77221114da1b9144ede48906",
           "name": "region",
           "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "ISO 3166-1 country code that narrows the list to titles released there, for example US.",
           "disabled": true
         }
       ],
@@ -698,21 +671,21 @@
           "id": "pair_b4c0aadf1cb64c615b27725451f5c4b9",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_da44c1e6040817777c013f74b10410b1",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
           "id": "pair_64db80b30c98874f5015f622acfd4eee",
           "name": "region",
           "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "ISO 3166-1 country code that narrows the list to titles released there, for example US.",
           "disabled": true
         }
       ],
@@ -743,7 +716,7 @@
       "_type": "request",
       "parentId": "fld_00970ed8cdb34247c8d7dd366f037f54",
       "name": "List upcoming movies",
-      "description": "Movies with a release date in the near future.",
+      "description": "Movies with a release date in the near future. The dates field holds the range the list covers.",
       "url": "{{ _.baseUrl }}/3/movie/upcoming",
       "method": "GET",
       "body": {},
@@ -752,21 +725,21 @@
           "id": "pair_2594ec6c5a0095039aa12f0df72db363",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_770b0da5c86c6676e3268989b0f431c7",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
           "id": "pair_fb9d8493461f61f97d462f7a4dace48c",
           "name": "region",
           "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "ISO 3166-1 country code that narrows the list to titles released there, for example US.",
           "disabled": true
         }
       ],
@@ -797,7 +770,7 @@
       "_type": "request",
       "parentId": "fld_00970ed8cdb34247c8d7dd366f037f54",
       "name": "List movies now playing",
-      "description": "Movies currently in cinemas.",
+      "description": "Movies currently in cinemas. The dates field holds the range the list covers.",
       "url": "{{ _.baseUrl }}/3/movie/now_playing",
       "method": "GET",
       "body": {},
@@ -806,21 +779,21 @@
           "id": "pair_d65434cba36ce6bd2a08e2403dce2b03",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_70c6b69fe273c0dfd83769b56dcb7dcb",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
           "id": "pair_378e75142e8548a9c3435c688b472f25",
           "name": "region",
           "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "ISO 3166-1 country code that narrows the list to titles released there, for example US.",
           "disabled": true
         }
       ],
@@ -851,7 +824,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "TV shows",
-      "description": "TV show details and the data attached to a show.",
+      "description": "TV show details, the data attached to a show, and the newest show.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 3000,
@@ -863,8 +836,8 @@
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
       "name": "Get TV show details",
-      "description": "Returns one TV show. Merge sub requests with `append_to_response`, for example `aggregate_credits,images`. amodb also accepts `moods`, `soundtracks`, `ratings` and `wikidata`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399",
+      "description": "Returns one TV show. Merge sub requests with `append_to_response`, for example `content_ratings,external_ids`. The standard names are credits, images, videos, keywords, translations, external_ids, similar, recommendations, reviews, content_ratings, watch/providers, alternative_titles, lists and episode_groups. amodb adds `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`. There is no `type` field, and `created_by` is empty for most shows. Adult titles answer 404.",
+      "url": "{{ _.baseUrl }}/3/tv/1396",
       "method": "GET",
       "body": {},
       "parameters": [
@@ -872,14 +845,14 @@
           "id": "pair_5cac827cc02cc67e818319b95d010138",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_a4ccd4d88e46dc0a3be5b3e16dbce6bc",
           "name": "append_to_response",
-          "value": "credits,images",
-          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "value": "content_ratings,external_ids",
+          "description": "Comma separated sub requests merged into the response, at most 20. Allowed names for a TV show: credits, images, videos, keywords, translations, external_ids, similar, recommendations, reviews, content_ratings, watch/providers, alternative_titles, lists, episode_groups, moods, soundtracks, ratings, wikidata, showtimes. A name that is not in this list is ignored. Each appended section has the shape of its own endpoint. The id is dropped from every appended section except wikidata and showtimes, which keep it.",
           "disabled": true
         }
       ],
@@ -906,20 +879,20 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_a5dde54aff2c73261d4914427b3853d4",
+      "_id": "req_07f8befe588dd19ac4553e4f6f5ccce4",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get aggregate credits",
-      "description": "Cast and crew summed over all episodes.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/aggregate_credits",
+      "name": "Get credits",
+      "description": "Cast and crew of the show.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/credits",
       "method": "GET",
       "body": {},
       "parameters": [
         {
-          "id": "pair_04bfba293aa66269c1f1d665ad786995",
+          "id": "pair_e95f1d38e43bfd7b7da969e7ef10e3fc",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -946,23 +919,15 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_07f8befe588dd19ac4553e4f6f5ccce4",
+      "_id": "req_303d3076bba1cffa20d36470206cfda9",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get credits",
-      "description": "Cast and crew of the latest season.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/credits",
+      "name": "Get content ratings",
+      "description": "Age ratings by country. TV shows only.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/content_ratings",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_e95f1d38e43bfd7b7da969e7ef10e3fc",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -986,12 +951,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_303d3076bba1cffa20d36470206cfda9",
+      "_id": "req_398bdb6043b5a933b1cd101a49194cfd",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get content ratings",
-      "description": "Age ratings by country.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/content_ratings",
+      "name": "Get episode groups",
+      "description": "Alternative episode orders of the show. Often empty. TV shows only.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/episode_groups",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1018,12 +983,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_398bdb6043b5a933b1cd101a49194cfd",
+      "_id": "req_38692365c9133c7a12213089e38e5e30",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get episode groups",
-      "description": "Alternative episode orders of the show.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/episode_groups",
+      "name": "Get external ids",
+      "description": "External ids of the show. kinopoisk_id is present when the Kinopoisk id is known.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/external_ids",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1050,15 +1015,23 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_38692365c9133c7a12213089e38e5e30",
+      "_id": "req_bc8f76260f568a14fb24601543b7822f",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get external ids",
-      "description": "External ids of the show, such as the IMDb id.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/external_ids",
+      "name": "Get images",
+      "description": "Posters, backdrops and logos. Use include_image_language to keep some languages.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/images",
       "method": "GET",
       "body": {},
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "pair_7b52ea231531278abe4bb3c8bbc13173",
+          "name": "include_image_language",
+          "value": "en,null",
+          "description": "Comma separated two letter language codes to keep, for example en,null. Add null for images without text. All languages are returned when it is missing. The language parameter does not filter images.",
+          "disabled": true
+        }
+      ],
       "headers": [
         {
           "name": "Accept",
@@ -1082,30 +1055,15 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_bc8f76260f568a14fb24601543b7822f",
+      "_id": "req_20310c26c9cc6aaa4bf8ffb2659404e7",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get images",
-      "description": "Posters, backdrops and logos.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/images",
+      "name": "Get keywords",
+      "description": "Keywords attached to the show.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/keywords",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_a87e476d725b75fb0535bed2426a5073",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_7b52ea231531278abe4bb3c8bbc13173",
-          "name": "include_image_language",
-          "value": "en,null",
-          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1129,15 +1087,23 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_20310c26c9cc6aaa4bf8ffb2659404e7",
+      "_id": "req_5d7c7bab43f0dd6003f39ee9825b80b2",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get keywords",
-      "description": "Keywords attached to the show.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/keywords",
+      "name": "Get recommendations",
+      "description": "Shows recommended for this show. One page of 20, without an id.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/recommendations",
       "method": "GET",
       "body": {},
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "pair_4f8c2545b208724917b55025c9f1acec",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
       "headers": [
         {
           "name": "Accept",
@@ -1161,30 +1127,15 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_5d7c7bab43f0dd6003f39ee9825b80b2",
+      "_id": "req_8a794aae26094de6a636a0f76885a705",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get recommendations",
-      "description": "Shows recommended for this show.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/recommendations",
+      "name": "Get reviews",
+      "description": "User reviews of the show. They are loaded on demand, so many titles have none and the list is empty.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/reviews",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_4f8c2545b208724917b55025c9f1acec",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_a077afaf151acf59a26a85b1cd7fb478",
-          "name": "page",
-          "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1208,27 +1159,20 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_8a794aae26094de6a636a0f76885a705",
+      "_id": "req_5210a4b74cf75ef477d2e567ce250d07",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get reviews",
-      "description": "User reviews of the show.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/reviews",
+      "name": "Get similar shows",
+      "description": "Shows with similar genres and keywords. One page of 20, without an id.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/similar",
       "method": "GET",
       "body": {},
       "parameters": [
         {
-          "id": "pair_10eab17c31ff090851c46dcc9546fd68",
+          "id": "pair_62f0eeb1ea1f24f07bd45712ecab5eda",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_117044e9a8e75d6f602560eefdb3fd91",
-          "name": "page",
-          "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -1255,30 +1199,15 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_5210a4b74cf75ef477d2e567ce250d07",
+      "_id": "req_6a5fe3b3c39846cab6695e5efd38ac1a",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get similar shows",
-      "description": "Shows with similar genres and keywords.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/similar",
+      "name": "Get translations",
+      "description": "Translated names and overviews.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/translations",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_62f0eeb1ea1f24f07bd45712ecab5eda",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_27e4e46c33daed7e66947b5774128e8b",
-          "name": "page",
-          "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1302,12 +1231,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_6a5fe3b3c39846cab6695e5efd38ac1a",
+      "_id": "req_8bc5275141efbe0a90478c48399ed224",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get translations",
-      "description": "Translated names and overviews.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/translations",
+      "name": "Get videos",
+      "description": "Trailers, teasers and clips.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/videos",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1334,30 +1263,15 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_8bc5275141efbe0a90478c48399ed224",
+      "_id": "req_14251edbf3062ef273cb4f9bfdc0443f",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get videos",
-      "description": "Trailers, teasers and clips.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/videos",
+      "name": "Get watch providers",
+      "description": "Where the show can be streamed, rented or bought, by country.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/watch/providers",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_6849a3f5978366c3e3b493bee942abdf",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_6e65f28db4075fc0fb6e0a3a52ff6591",
-          "name": "include_video_language",
-          "value": "en",
-          "description": "Comma separated language codes to keep, for example en,ru.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1381,12 +1295,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_14251edbf3062ef273cb4f9bfdc0443f",
+      "_id": "req_054afb206af1e16b44949c6b02ca24bb",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get watch providers",
-      "description": "Where the show can be streamed, rented or bought, by country.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/watch/providers",
+      "name": "Get alternative titles",
+      "description": "Names of the show in other countries.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/alternative_titles",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1413,15 +1327,30 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_054afb206af1e16b44949c6b02ca24bb",
+      "_id": "req_01ce766a57ec9e86e69199f9c214fadf",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get alternative titles",
-      "description": "Names of the show in other countries.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/alternative_titles",
+      "name": "Get lists with the show",
+      "description": "User lists that contain the show.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/lists",
       "method": "GET",
       "body": {},
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "pair_566bd86dad642368565ea6f36fa76baf",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
+          "disabled": true
+        },
+        {
+          "id": "pair_41d70f44e7cf307c9a92484684251789",
+          "name": "page",
+          "value": "1",
+          "description": "Page number, from 1 up to 500.",
+          "disabled": true
+        }
+      ],
       "headers": [
         {
           "name": "Accept",
@@ -1445,12 +1374,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_bbdcba51d3ef4692ed77811d0b6e3d70",
+      "_id": "req_0c6f316b51b9638759ef77e26e2ec2d4",
       "_type": "request",
       "parentId": "fld_ac32c5b119ff24c231285019ea57aab8",
-      "name": "Get episodes screened in cinemas",
-      "description": "Episodes that had a theatrical screening.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/screened_theatrically",
+      "name": "Get the newest TV show",
+      "description": "The newest TV show in the catalog: the highest id that is not adult. Same shape as TV show details. Cached for 10 minutes.",
+      "url": "{{ _.baseUrl }}/3/tv/latest",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1502,14 +1431,14 @@
           "id": "pair_50c2647267a4e5b3e6e7fa60b83f2589",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_b283fb9092dd1927cbabed0ec3845d7f",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -1549,14 +1478,14 @@
           "id": "pair_b0acf0f34288b5f6ddbf2be5184a8603",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_567db23844c77fec21c4951918194ae5",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -1587,7 +1516,7 @@
       "_type": "request",
       "parentId": "fld_e69043d6cf07cd566c99a404aad9bc85",
       "name": "List shows airing today",
-      "description": "Shows with an episode on air today.",
+      "description": "Shows with an episode on air today. timezone defines the day.",
       "url": "{{ _.baseUrl }}/3/tv/airing_today",
       "method": "GET",
       "body": {},
@@ -1596,14 +1525,14 @@
           "id": "pair_1fae9d88caac0e0d8f5505b9f5cf7356",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_f35e76032dce8ecd3140532d1a1b975c",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
@@ -1641,7 +1570,7 @@
       "_type": "request",
       "parentId": "fld_e69043d6cf07cd566c99a404aad9bc85",
       "name": "List shows on the air",
-      "description": "Shows with an episode in the next 7 days.",
+      "description": "Shows with an episode in the next 7 days. timezone defines the day.",
       "url": "{{ _.baseUrl }}/3/tv/on_the_air",
       "method": "GET",
       "body": {},
@@ -1650,14 +1579,14 @@
           "id": "pair_29500b5c24b7961c9052ad7fc5208b25",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_0ca66a045b1b10a63a9c7e2343935073",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
@@ -1707,8 +1636,8 @@
       "_type": "request",
       "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
       "name": "Get season details",
-      "description": "Returns one season with its episodes. Merge sub requests with `append_to_response`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1",
+      "description": "Returns one season with its episodes, crew and guest stars. Merge sub requests with `append_to_response`: credits, images, videos and external_ids.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1",
       "method": "GET",
       "body": {},
       "parameters": [
@@ -1716,14 +1645,14 @@
           "id": "pair_dd5dbef082dbe94aed15151f320804d3",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_32c14224ca4e11968be3bb8204c1ae3a",
           "name": "append_to_response",
-          "value": "credits,images",
-          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "value": "credits",
+          "description": "Comma separated sub requests merged into the response, at most 20. Allowed names for a season: credits, images, videos, external_ids. A name that is not in this list is ignored. Each appended section has the shape of its own endpoint. The id is dropped from every appended section.",
           "disabled": true
         }
       ],
@@ -1755,18 +1684,10 @@
       "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
       "name": "Get season credits",
       "description": "Cast and crew of the season.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/credits",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/credits",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_9156b6fdc0ece1bc6ef91e17aeeb6b97",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1794,8 +1715,8 @@
       "_type": "request",
       "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
       "name": "Get season external ids",
-      "description": "External ids of the season.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/external_ids",
+      "description": "External ids of the season. Every value is null today.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/external_ids",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1826,26 +1747,11 @@
       "_type": "request",
       "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
       "name": "Get season images",
-      "description": "Posters of the season.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/images",
+      "description": "Always an empty posters list.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/images",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_aef5a148aed4b00b1c7677cba83e722f",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_ffc02700cc42a0ab6affe20af1fff549",
-          "name": "include_image_language",
-          "value": "en,null",
-          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1873,26 +1779,11 @@
       "_type": "request",
       "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
       "name": "Get season videos",
-      "description": "Videos of the season.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/videos",
+      "description": "Always an empty list.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/videos",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_f7a31fb1e0a06d40760dbb2d11f4b1d7",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_374b057282aefa2edf3d9fdde6366ee9",
-          "name": "include_video_language",
-          "value": "en",
-          "description": "Comma separated language codes to keep, for example en,ru.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -1920,8 +1811,8 @@
       "_type": "request",
       "parentId": "fld_27d882d46a3864083c06461be23a1cbd",
       "name": "Get season translations",
-      "description": "Translated names and overviews.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/translations",
+      "description": "Always an empty list.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/translations",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -1964,8 +1855,8 @@
       "_type": "request",
       "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
       "name": "Get episode details",
-      "description": "Returns one episode. Merge sub requests with `append_to_response`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1",
+      "description": "Returns one episode with crew and guest stars. Merge sub requests with `append_to_response`: credits, images, videos, external_ids and translations.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/episode/1",
       "method": "GET",
       "body": {},
       "parameters": [
@@ -1973,14 +1864,14 @@
           "id": "pair_5a21c47db4b04a9935a008515e62517e",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_5fcc16897f7049f93363a17e7bb4ce9f",
           "name": "append_to_response",
-          "value": "credits,images",
-          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "value": "credits,translations",
+          "description": "Comma separated sub requests merged into the response, at most 20. Allowed names for an episode: credits, images, videos, external_ids, translations. A name that is not in this list is ignored. Each appended section has the shape of its own endpoint. The id is dropped from every appended section.",
           "disabled": true
         }
       ],
@@ -2011,19 +1902,11 @@
       "_type": "request",
       "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
       "name": "Get episode credits",
-      "description": "Cast, crew and guest stars of the episode.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/credits",
+      "description": "Crew and guest stars of the episode. The cast list is always empty.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/episode/1/credits",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_829b925a7521ae3bde7ff2b61d31f590",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -2051,8 +1934,8 @@
       "_type": "request",
       "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
       "name": "Get episode external ids",
-      "description": "External ids of the episode.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/external_ids",
+      "description": "External ids of the episode. Every value is null today.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/episode/1/external_ids",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -2083,26 +1966,11 @@
       "_type": "request",
       "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
       "name": "Get episode images",
-      "description": "Stills of the episode.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/images",
+      "description": "The still of the episode, when it has one.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/episode/1/images",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_1bf75bb7fa7b351204a3e8e47f64cab7",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_87d44b0a3bb5616f9b65fef3e8ece8d6",
-          "name": "include_image_language",
-          "value": "en,null",
-          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -2130,26 +1998,11 @@
       "_type": "request",
       "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
       "name": "Get episode videos",
-      "description": "Videos of the episode.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/videos",
+      "description": "Always an empty list.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/episode/1/videos",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_fea92498ef149e016613e77187b51139",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_366947df259f0ea025bef4cc9408c774",
-          "name": "include_video_language",
-          "value": "en",
-          "description": "Comma separated language codes to keep, for example en,ru.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -2178,7 +2031,7 @@
       "parentId": "fld_49d641ba8893f2f56bfba90855388d38",
       "name": "Get episode translations",
       "description": "Translated names and overviews.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/season/1/episode/1/translations",
+      "url": "{{ _.baseUrl }}/3/tv/1396/season/1/episode/1/translations",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -2209,7 +2062,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "People",
-      "description": "Person details, credits and popular people.",
+      "description": "Person details, credits and popular people. There is no latest person and no person translations.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 7000,
@@ -2221,7 +2074,7 @@
       "_type": "request",
       "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
       "name": "List popular people",
-      "description": "People ranked by current popularity.",
+      "description": "People ranked by current popularity. Adult people are never listed.",
       "url": "{{ _.baseUrl }}/3/person/popular",
       "method": "GET",
       "body": {},
@@ -2230,14 +2083,14 @@
           "id": "pair_6b62ffbf3d55e17214c4b2161611332b",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_bdf8cce367e5a8ffb77e81aadd667a38",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -2268,7 +2121,7 @@
       "_type": "request",
       "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
       "name": "Get person details",
-      "description": "Returns one person. Merge sub requests with `append_to_response`, for example `combined_credits`.",
+      "description": "Returns one person. Merge sub requests with `append_to_response`, for example `combined_credits,external_ids`. Adult people answer 404.",
       "url": "{{ _.baseUrl }}/3/person/287",
       "method": "GET",
       "body": {},
@@ -2277,14 +2130,14 @@
           "id": "pair_ec9ef583d45f5a6fc425617872ae73a9",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_3048776c08a817843b375e153622c9e4",
           "name": "append_to_response",
-          "value": "credits,images",
-          "description": "Comma separated sub requests merged into the response, at most 20. Use endpoint names such as credits, images, videos or external_ids. amodb also accepts `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
+          "value": "combined_credits,external_ids",
+          "description": "Comma separated sub requests merged into the response, at most 20. Allowed names for a person: combined_credits, movie_credits, tv_credits, external_ids, images. A name that is not in this list is ignored. Each appended section has the shape of its own endpoint. The id is dropped from every appended section.",
           "disabled": true
         }
       ],
@@ -2315,7 +2168,7 @@
       "_type": "request",
       "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
       "name": "Get combined credits",
-      "description": "Movie and TV credits of the person.",
+      "description": "Movie and TV credits of the person. Every entry carries media_type.",
       "url": "{{ _.baseUrl }}/3/person/287/combined_credits",
       "method": "GET",
       "body": {},
@@ -2324,7 +2177,7 @@
           "id": "pair_7b96d5bf91b3375a5f244738c1ba5a72",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -2364,7 +2217,7 @@
           "id": "pair_4ceedc9b57f7c5a00fac91c0e98a7b78",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -2404,7 +2257,7 @@
           "id": "pair_ef62ff6b8db2a1989fb238e0158f886b",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -2495,43 +2348,11 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_d69f1a19c2b19dcebde0971f09a80cf3",
-      "_type": "request",
-      "parentId": "fld_b37554f695b15005fd23907b9488e0a8",
-      "name": "Get translations",
-      "description": "Translated biographies.",
-      "url": "{{ _.baseUrl }}/3/person/287/translations",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 800,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
       "_id": "fld_bce06414177f72ab70e6387b6af9f8ce",
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Search",
-      "description": "Text search across movies, shows, people, collections, companies and keywords.",
+      "description": "Text search across movies, shows, people, collections, companies and keywords. include_adult is ignored.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 8000,
@@ -2543,7 +2364,7 @@
       "_type": "request",
       "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
       "name": "Search movies",
-      "description": "Finds movies by title.",
+      "description": "Finds movies by title. Adult titles are never returned.",
       "url": "{{ _.baseUrl }}/3/search/movie",
       "method": "GET",
       "body": {},
@@ -2552,42 +2373,35 @@
           "id": "pair_cbd39537cdfec3a98248635d86bedb27",
           "name": "query",
           "value": "inception",
-          "description": "(Required) Text to search for.",
+          "description": "(Required) Movie title to search for. A request without it returns an empty page.",
           "disabled": false
-        },
-        {
-          "id": "pair_f445a9589c989651129317e757ee7bd7",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
         },
         {
           "id": "pair_0d3d5caf59ba61373ff7b5d36ceecf1a",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_5246fa3a333e63cc3443093d04459a47",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
           "id": "pair_b37e7044e83a965a69df7c3ad6ea7f72",
           "name": "region",
           "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "ISO 3166-1 country code that narrows the list to titles released there, for example US.",
           "disabled": true
         },
         {
           "id": "pair_6c0045ebebe3c8fd603e37dc58e4f837",
           "name": "year",
           "value": "2010",
-          "description": "Release year.",
+          "description": "Release year, any release.",
           "disabled": true
         },
         {
@@ -2625,7 +2439,7 @@
       "_type": "request",
       "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
       "name": "Search TV shows",
-      "description": "Finds TV shows by name.",
+      "description": "Finds TV shows by name. Adult titles are never returned.",
       "url": "{{ _.baseUrl }}/3/search/tv",
       "method": "GET",
       "body": {},
@@ -2633,42 +2447,35 @@
         {
           "id": "pair_937558c204954c595265200bb94618dc",
           "name": "query",
-          "value": "inception",
-          "description": "(Required) Text to search for.",
+          "value": "breaking bad",
+          "description": "(Required) TV show name to search for. A request without it returns an empty page.",
           "disabled": false
-        },
-        {
-          "id": "pair_1898d791f7dae7b4c54b406e8a4e67a4",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
         },
         {
           "id": "pair_fae1e0b4157b90d3c9eb3190ecbf7ba2",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_45d259b4f0dcef58705f3ba41f019fe8",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
           "id": "pair_858b6f4cb5a34538121988b4969638e7",
           "name": "first_air_date_year",
-          "value": "2011",
+          "value": "2008",
           "description": "Year of the first air date.",
           "disabled": true
         },
         {
           "id": "pair_6f9e05b5e0937b573f6d72ab0e2b1963",
           "name": "year",
-          "value": "2010",
+          "value": "2008",
           "description": "Year of any air date.",
           "disabled": true
         }
@@ -2700,7 +2507,7 @@
       "_type": "request",
       "parentId": "fld_bce06414177f72ab70e6387b6af9f8ce",
       "name": "Search people",
-      "description": "Finds people by name.",
+      "description": "Finds people by name. Adult people are never returned.",
       "url": "{{ _.baseUrl }}/3/search/person",
       "method": "GET",
       "body": {},
@@ -2708,29 +2515,22 @@
         {
           "id": "pair_9fbba0ff0baafa578bed8fb9e5f65e1a",
           "name": "query",
-          "value": "inception",
-          "description": "(Required) Text to search for.",
+          "value": "brad pitt",
+          "description": "(Required) Person name to search for. A request without it returns an empty page.",
           "disabled": false
-        },
-        {
-          "id": "pair_f36064cbc5462811ee9841024e7c335f",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
         },
         {
           "id": "pair_12952df67e0f2f21118be00d937407c7",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_a7915d0877b23f7f633585ebb9304d9d",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -2769,29 +2569,22 @@
         {
           "id": "pair_441ffee823bac1f26fc52be0f1d28892",
           "name": "query",
-          "value": "inception",
-          "description": "(Required) Text to search for.",
+          "value": "fight club",
+          "description": "(Required) Text to search for across movies, shows and people. A request without it returns an empty page.",
           "disabled": false
-        },
-        {
-          "id": "pair_91e51853ed12adf7af614c0cf2dcdce5",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
         },
         {
           "id": "pair_e8b5c847c481e05b3017462c312fcc27",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_e72d10cf3a5b10e3f525718978f9907b",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -2830,36 +2623,22 @@
         {
           "id": "pair_ab38bf795cba79f95ae0e5e6d8de8e0a",
           "name": "query",
-          "value": "inception",
-          "description": "(Required) Text to search for.",
+          "value": "batman",
+          "description": "(Required) Collection name to search for. A request without it returns an empty page.",
           "disabled": false
-        },
-        {
-          "id": "pair_f92e31cacc2aa6dfff96da7183dc7833",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
         },
         {
           "id": "pair_648b89225b415afbb2aa4417d2568b38",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_52b498f25973871adecfbe837cdc0be2",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
-          "disabled": true
-        },
-        {
-          "id": "pair_094bafc0b1cffeac437d5e3e8bf09963",
-          "name": "region",
-          "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -2898,15 +2677,15 @@
         {
           "id": "pair_82644f2720b5b4e9af83321ca55339c5",
           "name": "query",
-          "value": "inception",
-          "description": "(Required) Text to search for.",
+          "value": "warner",
+          "description": "(Required) Company name to search for. A request without it returns an empty page.",
           "disabled": false
         },
         {
           "id": "pair_2a974e801103c55dc04e9ceb6865d6cc",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -2945,15 +2724,15 @@
         {
           "id": "pair_46b4a8674b18b31243603d27e600d829",
           "name": "query",
-          "value": "inception",
-          "description": "(Required) Text to search for.",
+          "value": "space",
+          "description": "(Required) Keyword to search for. A request without it returns an empty page.",
           "disabled": false
         },
         {
           "id": "pair_489f94101df96de7e84e2e709a09a513",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -2996,7 +2775,7 @@
       "_type": "request",
       "parentId": "fld_4827ea22716a74aaf8bbe499fc314bb9",
       "name": "Discover movies",
-      "description": "Filters and sorts movies. All filters are optional.",
+      "description": "Filters and sorts movies. All filters are optional and are checked against live data. Adult titles are never returned.",
       "url": "{{ _.baseUrl }}/3/discover/movie",
       "method": "GET",
       "body": {},
@@ -3030,13 +2809,6 @@
           "disabled": true
         },
         {
-          "id": "pair_3b23c8c2d3ab997dab63615d06692872",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
-        },
-        {
           "id": "pair_abafe87d4382a7b6dc52bc65e3fd2f25",
           "name": "include_video",
           "value": "false",
@@ -3047,14 +2819,14 @@
           "id": "pair_79692ec2854daa75bee1fcad986b6df2",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_16a998367fc96cc581badc010bd905d6",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
@@ -3082,21 +2854,21 @@
           "id": "pair_87f14ce3b22b46d77e134757a18cae0c",
           "name": "region",
           "value": "US",
-          "description": "ISO 3166-1 country code that narrows release dates and lists, for example US.",
+          "description": "ISO 3166-1 country code that narrows the list to titles released there, for example US.",
           "disabled": true
         },
         {
           "id": "pair_3950a76b2cd91c41f4a1dbfd2e2d5024",
           "name": "release_date.gte",
           "value": "2025-01-01",
-          "description": "Release on or after this date.",
+          "description": "Any release on or after this date.",
           "disabled": true
         },
         {
           "id": "pair_f06399825e15f50becbfd9b805c73ecf",
           "name": "release_date.lte",
           "value": "2025-01-01",
-          "description": "Release on or before this date.",
+          "description": "Any release on or before this date.",
           "disabled": true
         },
         {
@@ -3151,7 +2923,7 @@
         {
           "id": "pair_09667388718ed0910c0aa2c482beb2d9",
           "name": "with_companies",
-          "value": "1",
+          "value": "25",
           "description": "Company ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
           "disabled": true
         },
@@ -3200,8 +2972,8 @@
         {
           "id": "pair_f59be4b5be1a68afac1581ac251291a3",
           "name": "with_release_type",
-          "value": "2|3",
-          "description": "Release types to match, for example 2|3. Same codes as release_dates.",
+          "value": "3",
+          "description": "Release types to match, for example 2|3. Same codes as release_dates. Use it with region.",
           "disabled": true
         },
         {
@@ -3257,14 +3029,14 @@
           "id": "pair_d12515230a4ec7e77edf7a4451a0a266",
           "name": "without_watch_providers",
           "value": "8",
-          "description": "Watch provider ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "description": "Watch provider ids to exclude. Needs watch_region. Comma separated ids match all of them. Pipe separated ids match any of them.",
           "disabled": true
         },
         {
           "id": "pair_e6ceb0540e5be8cb1ce2db6d68731d5c",
           "name": "year",
           "value": "2010",
-          "description": "Release year.",
+          "description": "Release year, any release.",
           "disabled": true
         }
       ],
@@ -3295,7 +3067,7 @@
       "_type": "request",
       "parentId": "fld_4827ea22716a74aaf8bbe499fc314bb9",
       "name": "Discover TV shows",
-      "description": "Filters and sorts TV shows. All filters are optional.",
+      "description": "Filters and sorts TV shows. All filters are optional and are checked against live data. Adult titles are never returned.",
       "url": "{{ _.baseUrl }}/3/discover/tv",
       "method": "GET",
       "body": {},
@@ -3336,31 +3108,17 @@
           "disabled": true
         },
         {
-          "id": "pair_2631d51c5bff92bc3a9baa88e67aab7d",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
-        },
-        {
-          "id": "pair_778e754990ed42ec50c706f9d3b739f1",
-          "name": "include_null_first_air_dates",
-          "value": "false",
-          "description": "Include shows without a first air date.",
-          "disabled": true
-        },
-        {
           "id": "pair_a4ebee9c388f4074dd4568e1d216523c",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_06a5f076bf603bb0ecc4cbfdae9de0ea",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         },
         {
@@ -3422,7 +3180,7 @@
         {
           "id": "pair_c2d5c5deb205dd0f088762fba7cb1b28",
           "name": "with_companies",
-          "value": "1",
+          "value": "25",
           "description": "Company ids. Comma separated ids match all of them. Pipe separated ids match any of them.",
           "disabled": true
         },
@@ -3528,7 +3286,7 @@
           "id": "pair_1c423618c79890ec8012b95eddcd1099",
           "name": "without_watch_providers",
           "value": "8",
-          "description": "Watch provider ids to exclude. Comma separated ids match all of them. Pipe separated ids match any of them.",
+          "description": "Watch provider ids to exclude. Needs watch_region. Comma separated ids match all of them. Pipe separated ids match any of them.",
           "disabled": true
         }
       ],
@@ -3580,14 +3338,14 @@
           "id": "pair_cf77fc3d1aab909f974e4a296d68f322",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_0bb3517d78843ddd85efaf45494b330b",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -3639,7 +3397,7 @@
           "id": "pair_e921828e31b1e97ffd3348aa9b6df623",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -3679,7 +3437,7 @@
           "id": "pair_060d70c173ad1a9bfd9635ac7d3ae557",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -3710,7 +3468,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Collections",
-      "description": "Movie collections.",
+      "description": "Movie collections. Images and translations of collections are not offered.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 12000,
@@ -3722,7 +3480,7 @@
       "_type": "request",
       "parentId": "fld_4bbb632f02fd69807705c0179999c17d",
       "name": "Get collection details",
-      "description": "Returns one collection with its movies in the parts list.",
+      "description": "Returns one collection with its movies in parts, ordered by release date. Entries without a date come last.",
       "url": "{{ _.baseUrl }}/3/collection/10",
       "method": "GET",
       "body": {},
@@ -3731,7 +3489,7 @@
           "id": "pair_5f3c4fe50743aa6d33e9ba3e12336f53",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -3747,85 +3505,6 @@
         "prefix": ""
       },
       "metaSortKey": 100,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_ee4586160c6f969ad690193b30ee937a",
-      "_type": "request",
-      "parentId": "fld_4bbb632f02fd69807705c0179999c17d",
-      "name": "Get collection images",
-      "description": "Posters and backdrops of the collection.",
-      "url": "{{ _.baseUrl }}/3/collection/10/images",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "id": "pair_9675f5fcfd68fd884e83e1b1a3929b8c",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
-          "id": "pair_a285b4235f3e6fe81e846d75197d30f1",
-          "name": "include_image_language",
-          "value": "en,null",
-          "description": "Comma separated language codes to keep, for example en,null. Add null for images without text.",
-          "disabled": true
-        }
-      ],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 200,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_7024ae801877ace42210ce2b8bea60d9",
-      "_type": "request",
-      "parentId": "fld_4bbb632f02fd69807705c0179999c17d",
-      "name": "Get collection translations",
-      "description": "Translated names and overviews.",
-      "url": "{{ _.baseUrl }}/3/collection/10/translations",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 300,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -3841,7 +3520,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Companies",
-      "description": "Production companies.",
+      "description": "Production companies. Images, translations and alternative names are not offered.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 13000,
@@ -3853,8 +3532,8 @@
       "_type": "request",
       "parentId": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
       "name": "Get company details",
-      "description": "Returns one production company.",
-      "url": "{{ _.baseUrl }}/3/company/1",
+      "description": "Returns one production company. description is always empty and parent_company is always null.",
+      "url": "{{ _.baseUrl }}/3/company/25",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -3870,70 +3549,6 @@
         "prefix": ""
       },
       "metaSortKey": 100,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_3cedcfe3717faed5620cf448abd56a28",
-      "_type": "request",
-      "parentId": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
-      "name": "Get alternative names",
-      "description": "Other names of the company.",
-      "url": "{{ _.baseUrl }}/3/company/1/alternative_names",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 200,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_cd6717ea9638ad0fff66179fa8e5c101",
-      "_type": "request",
-      "parentId": "fld_9dba7ad7c5bdb2aa80495855ae01b2cb",
-      "name": "Get company images",
-      "description": "Logos of the company.",
-      "url": "{{ _.baseUrl }}/3/company/1/images",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 300,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -3949,7 +3564,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Networks",
-      "description": "TV networks.",
+      "description": "TV networks. Images, translations and alternative names are not offered.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 14000,
@@ -3962,7 +3577,7 @@
       "parentId": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
       "name": "Get network details",
       "description": "Returns one TV network.",
-      "url": "{{ _.baseUrl }}/3/network/1",
+      "url": "{{ _.baseUrl }}/3/network/49",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -3978,70 +3593,6 @@
         "prefix": ""
       },
       "metaSortKey": 100,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_a9bd82eb6f993d4c810fbeed6728f341",
-      "_type": "request",
-      "parentId": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
-      "name": "Get alternative names",
-      "description": "Other names of the network.",
-      "url": "{{ _.baseUrl }}/3/network/1/alternative_names",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 200,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_2317e4d7bf088cd2583be3d9aedb61a9",
-      "_type": "request",
-      "parentId": "fld_e931cb5b030b0b23b76dc4c2cda72c59",
-      "name": "Get network images",
-      "description": "Logos of the network.",
-      "url": "{{ _.baseUrl }}/3/network/1/images",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 300,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -4101,30 +3652,23 @@
       "_type": "request",
       "parentId": "fld_f530db58b3e5088dc7412c6d2298ba3f",
       "name": "Get movies with a keyword",
-      "description": "Movies tagged with the keyword.",
+      "description": "Movies tagged with the keyword, most popular first. Adult titles are never returned.",
       "url": "{{ _.baseUrl }}/3/keyword/818/movies",
       "method": "GET",
       "body": {},
       "parameters": [
         {
-          "id": "pair_fbff5c41517f2fc0955cc60e9a976863",
-          "name": "include_adult",
-          "value": "false",
-          "description": "Include adult titles in the results.",
-          "disabled": true
-        },
-        {
           "id": "pair_ab3b3d2f87cc2b096b9720d283bb2fb5",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         },
         {
           "id": "pair_182d40c3407ac14ec2da7ce814503b98",
           "name": "page",
           "value": "1",
-          "description": "Page number. Lists have at most 500 pages.",
+          "description": "Page number, from 1 up to 500.",
           "disabled": true
         }
       ],
@@ -4155,7 +3699,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Find",
-      "description": "Look up titles by an id from another system.",
+      "description": "Look up titles and people by an id from another system. Twelve external_source values are accepted.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 16000,
@@ -4167,7 +3711,7 @@
       "_type": "request",
       "parentId": "fld_df251b06eefdaa932e97b54fbe9a74d3",
       "name": "Find by external id",
-      "description": "Finds movies, shows, seasons, episodes and people by an id from another system. amodb accepts `imdb_id`, `tvdb_id`, `wikidata_id` and `kinopoisk_id`.",
+      "description": "Finds movies, shows and people by an id from another system. external_source is required and has 12 values. These resolve: `imdb_id` (tt ids for titles, nm ids for people), `tvdb_id`, `facebook_id`, `twitter_id`, `instagram_id`, `wikidata_id` (titles and people) and `kinopoisk_id` (amodb). `freebase_mid`, `freebase_id`, `tvrage_id`, `tiktok_id` and `youtube_id` are accepted and return empty lists. tv_episode_results and tv_season_results are always empty. A missing or unknown external_source, or an id longer than 64 characters, answers 400 with code 22. An id with characters other than letters, digits, underscore, dot, at sign and hyphen answers 404.",
       "url": "{{ _.baseUrl }}/3/find/tt0137523",
       "method": "GET",
       "body": {},
@@ -4183,7 +3727,7 @@
           "id": "pair_f7677184400dbf1e96d0183ee3ea0732",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -4214,7 +3758,7 @@
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
       "name": "Configuration",
-      "description": "Image base URLs, size lists and reference data.",
+      "description": "Image base URLs, size lists and reference data. There is no timezones list.",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": 17000,
@@ -4258,19 +3802,11 @@
       "_type": "request",
       "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
       "name": "List countries",
-      "description": "Countries with ISO 3166-1 codes.",
+      "description": "Countries with ISO 3166-1 codes, sorted by English name. Names are in English and in the local language.",
       "url": "{{ _.baseUrl }}/3/configuration/countries",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "id": "pair_a1ffb99a87fd0d3f3a7457c40418c5ef",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Accept",
@@ -4330,7 +3866,7 @@
       "_type": "request",
       "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
       "name": "List languages",
-      "description": "Languages with ISO 639-1 codes.",
+      "description": "Languages with ISO 639-1 codes, sorted by English name.",
       "url": "{{ _.baseUrl }}/3/configuration/languages",
       "method": "GET",
       "body": {},
@@ -4362,7 +3898,7 @@
       "_type": "request",
       "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
       "name": "List primary translations",
-      "description": "Language and country tags used for translations.",
+      "description": "The 14 language and country tags that amodb serves, such as en-US and ru-RU.",
       "url": "{{ _.baseUrl }}/3/configuration/primary_translations",
       "method": "GET",
       "body": {},
@@ -4390,38 +3926,6 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_4a8f508e0346cf56107c0f6369795c3c",
-      "_type": "request",
-      "parentId": "fld_754164850f38c1ecdaf6b8ed894cb192",
-      "name": "List timezones",
-      "description": "Timezones by country.",
-      "url": "{{ _.baseUrl }}/3/configuration/timezones",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 600,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
       "_id": "fld_b65e36f73b8a3eb61a2d245a5d6b374d",
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
@@ -4438,7 +3942,7 @@
       "_type": "request",
       "parentId": "fld_b65e36f73b8a3eb61a2d245a5d6b374d",
       "name": "List movie certifications",
-      "description": "Movie age ratings by country.",
+      "description": "Movie age ratings for 10 countries: AU, BR, CA, DE, ES, FR, GB, IT, RU and US.",
       "url": "{{ _.baseUrl }}/3/certification/movie/list",
       "method": "GET",
       "body": {},
@@ -4470,7 +3974,7 @@
       "_type": "request",
       "parentId": "fld_b65e36f73b8a3eb61a2d245a5d6b374d",
       "name": "List TV certifications",
-      "description": "TV age ratings by country.",
+      "description": "TV age ratings by country, built from the ratings in the catalog. meaning is empty.",
       "url": "{{ _.baseUrl }}/3/certification/tv/list",
       "method": "GET",
       "body": {},
@@ -4523,7 +4027,7 @@
           "id": "pair_807574b350358e19e093e6b5563f68ca",
           "name": "language",
           "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
           "disabled": true
         }
       ],
@@ -4559,13 +4063,6 @@
       "method": "GET",
       "body": {},
       "parameters": [
-        {
-          "id": "pair_314d34c1ca6e638e4b28620e394969c2",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
         {
           "id": "pair_10b810154a332007f16f8cff6cd39c5f",
           "name": "watch_region",
@@ -4607,13 +4104,6 @@
       "body": {},
       "parameters": [
         {
-          "id": "pair_9ec8be4a37c1894ee0d2014923a36742",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        },
-        {
           "id": "pair_e2d306365862a19ad10472b30602ef9e",
           "name": "watch_region",
           "value": "US",
@@ -4644,102 +4134,6 @@
       "modified": 1792281600000
     },
     {
-      "_id": "fld_b83c4cdafef5813f0872892b666e2b04",
-      "_type": "request_group",
-      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
-      "name": "Reviews",
-      "description": "Single review lookup.",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": 20000,
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_8041a369dfb081cb13ee9c3c043f912d",
-      "_type": "request",
-      "parentId": "fld_b83c4cdafef5813f0872892b666e2b04",
-      "name": "Get review details",
-      "description": "Returns one review with the title it belongs to.",
-      "url": "{{ _.baseUrl }}/3/review/5a64d1ce9251417d7c01a2ae",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 100,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "fld_bfac50d6424b5166c3ee2808c85ae7c1",
-      "_type": "request_group",
-      "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
-      "name": "Credits",
-      "description": "Single credit lookup.",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": 21000,
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
-      "_id": "req_ee8a9c64ad7e81baf2c44acd229f2ce9",
-      "_type": "request",
-      "parentId": "fld_bfac50d6424b5166c3ee2808c85ae7c1",
-      "name": "Get credit details",
-      "description": "Returns one credit with the person and the title.",
-      "url": "{{ _.baseUrl }}/3/credit/52fe4250c3a36847f80149f3",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "id": "pair_956ac864db530e3e357ec985732366b1",
-          "name": "language",
-          "value": "en-US",
-          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es. Any other value falls back to en.",
-          "disabled": true
-        }
-      ],
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.apiKey }}",
-        "prefix": ""
-      },
-      "metaSortKey": 100,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "created": 1792281600000,
-      "modified": 1792281600000
-    },
-    {
       "_id": "fld_656bcfe284e2da39c77d4fdab55b16ad",
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
@@ -4747,7 +4141,7 @@
       "description": "Routes that exist only in amodb: `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`.",
       "environment": {},
       "environmentPropertyOrder": null,
-      "metaSortKey": 22000,
+      "metaSortKey": 20000,
       "created": 1792281600000,
       "modified": 1792281600000
     },
@@ -4756,7 +4150,7 @@
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
       "name": "Get movie moods",
-      "description": "Mood meters of the movie. Also available as `append_to_response=moods`.",
+      "description": "Mood meters of the movie: action, fear, humor, pace, profanity, romance, sadness, sex and violence. Not every title has all nine. avg and values use a scale from 0 to 10. source is measured when viewers rated the title, estimated when it is derived from the genres, and null with an empty results list when the title has no data. Also available as `append_to_response=moods`, then without an id.",
       "url": "{{ _.baseUrl }}/3/movie/550/moods",
       "method": "GET",
       "body": {},
@@ -4788,7 +4182,7 @@
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
       "name": "Get movie soundtracks",
-      "description": "Soundtrack listing of the movie. Also available as `append_to_response=soundtracks`.",
+      "description": "Soundtrack album of the movie with its tracks. results holds at most one album today and is empty when none is known. Also available as `append_to_response=soundtracks`, then without an id.",
       "url": "{{ _.baseUrl }}/3/movie/550/soundtracks",
       "method": "GET",
       "body": {},
@@ -4820,7 +4214,7 @@
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
       "name": "Get movie ratings",
-      "description": "Ratings of the movie from several providers. A provider without data is null. Also available as `append_to_response=ratings`.",
+      "description": "Ratings of the movie from IMDb, Kinopoisk, Metacritic, Rotten Tomatoes and TMDB. A provider with a missing or zero score is null. IMDb, Kinopoisk and TMDB are out of 10, Metacritic and Rotten Tomatoes are out of 100. votes can be null. Also available as `append_to_response=ratings`, then without an id.",
       "url": "{{ _.baseUrl }}/3/movie/550/ratings",
       "method": "GET",
       "body": {},
@@ -4848,15 +4242,23 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_c7d70e229fbbd3a7764afb1477cc423a",
+      "_id": "req_6de1dff81690198a6150a969f08e7fb8",
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
-      "name": "Get movie linked data facts",
-      "description": "Selected facts about the movie. Also available as `append_to_response=wikidata`.",
+      "name": "Get movie Wikidata facts",
+      "description": "Facts about the movie from Wikidata: budget, box office, previous and next title, Wikipedia pages, awards, nominations, source works and locations. label is in the request language and falls back to English. Also available as `append_to_response=wikidata`, which keeps the id.",
       "url": "{{ _.baseUrl }}/3/movie/550/wikidata",
       "method": "GET",
       "body": {},
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "pair_9b331001b9f3c3066732ffc7aaba1fc8",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
+          "disabled": true
+        }
+      ],
       "headers": [
         {
           "name": "Accept",
@@ -4880,15 +4282,30 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_a56b0beed51da32356f131bbb7fbc1f2",
+      "_id": "req_e9661dc3a0ac8ce656f5d3d928cb2a3f",
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
-      "name": "Get TV show moods",
-      "description": "Mood meters of the TV show. Also available as `append_to_response=moods`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/moods",
+      "name": "Get movie showtimes",
+      "description": "Cinema screenings of the movie from today on. Without country (or with an invalid one) the response has only the per country totals in countries, at most 60, most screenings first. With country, results lists the venues with up to 1500 screenings in total, and countries is still included. Also available as `append_to_response=showtimes` with country or region, which keeps the id. Cached for 30 minutes.",
+      "url": "{{ _.baseUrl }}/3/movie/550/showtimes",
       "method": "GET",
       "body": {},
-      "parameters": [],
+      "parameters": [
+        {
+          "id": "pair_b3a443fd719eb7afc8c388ea241f261e",
+          "name": "country",
+          "value": "RU",
+          "description": "ISO 3166-1 country code, for example RU. Without a valid country the response has only the per country totals in countries. With one, results lists the venues.",
+          "disabled": true
+        },
+        {
+          "id": "pair_146a2bdf8db160897b6e584aa39b11d3",
+          "name": "region",
+          "value": "RU",
+          "description": "Alias of country. country wins when both are sent.",
+          "disabled": true
+        }
+      ],
       "headers": [
         {
           "name": "Accept",
@@ -4912,12 +4329,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_fb00c79af7e7c1e807e1e80cf87e386f",
+      "_id": "req_a56b0beed51da32356f131bbb7fbc1f2",
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
-      "name": "Get TV show soundtracks",
-      "description": "Soundtrack listing of the TV show. Also available as `append_to_response=soundtracks`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/soundtracks",
+      "name": "Get TV show moods",
+      "description": "Mood meters of the TV show: action, fear, humor, pace, profanity, romance, sadness, sex and violence. Not every title has all nine. avg and values use a scale from 0 to 10. source is measured when viewers rated the title, estimated when it is derived from the genres, and null with an empty results list when the title has no data. Also available as `append_to_response=moods`, then without an id.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/moods",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -4944,12 +4361,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_2c8dcff90482b8b686c4f2c387081d78",
+      "_id": "req_fb00c79af7e7c1e807e1e80cf87e386f",
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
-      "name": "Get TV show ratings",
-      "description": "Ratings of the TV show from several providers. A provider without data is null. Also available as `append_to_response=ratings`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/ratings",
+      "name": "Get TV show soundtracks",
+      "description": "Soundtrack album of the TV show with its tracks. results holds at most one album today and is empty when none is known. Also available as `append_to_response=soundtracks`, then without an id.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/soundtracks",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -4976,12 +4393,12 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_8a766ad0784d8a95ee7212da5bb2fa9e",
+      "_id": "req_2c8dcff90482b8b686c4f2c387081d78",
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
-      "name": "Get TV show linked data facts",
-      "description": "Selected facts about the TV show. Also available as `append_to_response=wikidata`.",
-      "url": "{{ _.baseUrl }}/3/tv/1399/wikidata",
+      "name": "Get TV show ratings",
+      "description": "Ratings of the TV show from IMDb, Kinopoisk, Metacritic, Rotten Tomatoes and TMDB. A provider with a missing or zero score is null. IMDb, Kinopoisk and TMDB are out of 10, Metacritic and Rotten Tomatoes are out of 100. votes can be null. Also available as `append_to_response=ratings`, then without an id.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/ratings",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -5008,21 +4425,21 @@
       "modified": 1792281600000
     },
     {
-      "_id": "req_e9661dc3a0ac8ce656f5d3d928cb2a3f",
+      "_id": "req_ae22abbffc522ecf5c70ea30034cb866",
       "_type": "request",
       "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
-      "name": "Get movie showtimes",
-      "description": "Cinema showtimes for one country when known. Also available as `append_to_response=showtimes`.",
-      "url": "{{ _.baseUrl }}/3/movie/550/showtimes",
+      "name": "Get TV show Wikidata facts",
+      "description": "Facts about the TV show from Wikidata: previous and next title, Wikipedia pages, awards, nominations, source works, locations and original broadcasters. label is in the request language and falls back to English. Also available as `append_to_response=wikidata`, which keeps the id.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/wikidata",
       "method": "GET",
       "body": {},
       "parameters": [
         {
-          "id": "pair_b3a443fd719eb7afc8c388ea241f261e",
-          "name": "country",
-          "value": "US",
-          "description": "(Required) ISO 3166-1 country code.",
-          "disabled": false
+          "id": "pair_564d434df4b97a9cc93064b420ae985d",
+          "name": "language",
+          "value": "en-US",
+          "description": "Language tag, for example en-US, ru-RU or pt-BR. Fourteen base languages are served: en, ru, uk, be, zh, pt, bg, he, cs, ro, fr, pl, it, es (tags en-US, ru-RU, uk-UA, be-BY, zh-CN, pt-BR, bg-BG, he-IL, cs-CZ, ro-RO, fr-FR, pl-PL, it-IT, es-ES). A bare code such as ru works too, and the legacy code iw maps to he. Any other value falls back to en.",
+          "disabled": true
         }
       ],
       "headers": [
@@ -5048,6 +4465,53 @@
       "modified": 1792281600000
     },
     {
+      "_id": "req_3b066019986d00ab601bd113da6caf94",
+      "_type": "request",
+      "parentId": "fld_656bcfe284e2da39c77d4fdab55b16ad",
+      "name": "Get TV show showtimes",
+      "description": "Cinema screenings of the TV show from today on. Without country (or with an invalid one) the response has only the per country totals in countries, at most 60, most screenings first. With country, results lists the venues with up to 1500 screenings in total, and countries is still included. Also available as `append_to_response=showtimes` with country or region, which keeps the id. Cached for 30 minutes.",
+      "url": "{{ _.baseUrl }}/3/tv/1396/showtimes",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "id": "pair_daaea4d16b47d9088f5a735d5a352175",
+          "name": "country",
+          "value": "RU",
+          "description": "ISO 3166-1 country code, for example RU. Without a valid country the response has only the per country totals in countries. With one, results lists the venues.",
+          "disabled": true
+        },
+        {
+          "id": "pair_878307c5bbe64af37629deee50f3de6f",
+          "name": "region",
+          "value": "RU",
+          "description": "Alias of country. country wins when both are sent.",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.apiKey }}",
+        "prefix": ""
+      },
+      "metaSortKey": 1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "created": 1792281600000,
+      "modified": 1792281600000
+    },
+    {
       "_id": "fld_0cde62a8699a1df5f2d5d994ea95d4da",
       "_type": "request_group",
       "parentId": "wrk_3b563829704d414c55a5c552691f4f73",
@@ -5055,7 +4519,7 @@
       "description": "OMDb compatible lookup and search.",
       "environment": {},
       "environmentPropertyOrder": null,
-      "metaSortKey": 23000,
+      "metaSortKey": 21000,
       "created": 1792281600000,
       "modified": 1792281600000
     },
@@ -5064,7 +4528,7 @@
       "_type": "request",
       "parentId": "fld_0cde62a8699a1df5f2d5d994ea95d4da",
       "name": "Look up or search titles",
-      "description": "OMDb compatible route. Send i for an IMDb id, t for a title, or s to search. Every value in the response is a string. A lookup that finds nothing returns HTTP 200 with Response False. The trailing slash is optional.",
+      "description": "OMDb compatible route. Send `i` for an IMDb id, `t` for a title, or `s` to search. Every value in the response is a string. Errors are HTTP 200 with `{\"Response\": \"False\", \"Error\": \"...\"}`, for example Movie not found!, Incorrect IMDb ID., Too many results. (a search under 3 letters or too broad) and Something went wrong. (none of i, t and s). The one exception is `r` other than json, which answers 400. Episodes and seasons are not offered, so `type=episode` finds nothing. The trailing slash is optional.",
       "url": "{{ _.baseUrl }}/omdb/",
       "method": "GET",
       "body": {},
@@ -5073,7 +4537,7 @@
           "id": "pair_c284caaf006b9ca6526787db316b52f4",
           "name": "i",
           "value": "tt0137523",
-          "description": "IMDb id. Returns one title.",
+          "description": "IMDb id, 7 to 9 digits after tt. Returns one title.",
           "disabled": false
         },
         {
@@ -5087,7 +4551,7 @@
           "id": "pair_a6cfbf5a4c5eeea036b1558dbf29efd0",
           "name": "s",
           "value": "inception",
-          "description": "Title to search for. Returns a page of results.",
+          "description": "Title to search for. Returns a page of results, 10 per page. Needs at least 3 letters.",
           "disabled": true
         },
         {
@@ -5115,14 +4579,14 @@
           "id": "pair_648880e5104aa1c9766af04a872c02f5",
           "name": "page",
           "value": "1",
-          "description": "Page of search results. Used with s.",
+          "description": "Page of search results, 10 per page. Used with s.",
           "disabled": true
         },
         {
           "id": "pair_4589983c2804ced809fd7732f1ffca37",
           "name": "r",
           "value": "json",
-          "description": "Response format. Only json is offered. xml returns 400.",
+          "description": "Response format. Only json is offered. Any other value answers 400.",
           "disabled": true
         }
       ],
@@ -5157,7 +4621,7 @@
       "description": "Image files on the image host.",
       "environment": {},
       "environmentPropertyOrder": null,
-      "metaSortKey": 24000,
+      "metaSortKey": 22000,
       "created": 1792281600000,
       "modified": 1792281600000
     },
@@ -5166,7 +4630,7 @@
       "_type": "request",
       "parentId": "fld_09e871c98fef3b901a775def173e4126",
       "name": "Get an image",
-      "description": "Serves an image on the img.amodb.dev host. No key is needed. Build the path from images.secure_base_url in /3/configuration, a size and the file_path of an image without its leading slash.",
+      "description": "Serves an image on the img.amodb.dev host. No key is needed. Build the path from images.secure_base_url in /3/configuration, a size and the file_path of an image without its leading slash. An unknown size or file answers 404 with the TMDB error body.",
       "url": "{{ _.imageBaseUrl }}/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
       "method": "GET",
       "body": {},
@@ -5197,7 +4661,7 @@
       "description": "Public list of plans and prices.",
       "environment": {},
       "environmentPropertyOrder": null,
-      "metaSortKey": 25000,
+      "metaSortKey": 23000,
       "created": 1792281600000,
       "modified": 1792281600000
     },

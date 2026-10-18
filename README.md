@@ -10,7 +10,7 @@ amodb is a paid API for movie and TV metadata. It is compatible with TMDB v3 and
 
 | File | What it is |
 |---|---|
-| `openapi.yaml` | The OpenAPI 3.1.0 document: 107 paths, 107 operations, 25 tags |
+| `openapi.yaml` | The OpenAPI 3.1.0 document: 99 paths, 99 operations, 23 tags |
 | `postman_collection.json` | Postman collection v2.1, one folder per tag |
 | `insomnia_export.json` | Insomnia v4 export, one folder per tag, with an environment |
 | `redocly.yaml` | Lint configuration |
@@ -18,13 +18,30 @@ amodb is a paid API for movie and TV metadata. It is compatible with TMDB v3 and
 
 The spec covers:
 
-- TMDB v3 read endpoints under `/3`: movies, TV shows, seasons, episodes, people, search, discover, trending, genres, collections, companies, networks, keywords, find, configuration, certifications, watch providers, reviews and credits.
-- amodb extensions: `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes`, plus extra `append_to_response` values and more `external_source` values for `find`.
-- The OMDb compatible route at `/omdb/`.
+- TMDB v3 read endpoints under `/3`: movies, TV shows, seasons, episodes, people, search, discover, trending, genres, collections, companies, networks, keywords, find, configuration, certifications and watch providers. It includes `/3/movie/latest` and `/3/tv/latest`.
+- amodb extensions: `moods`, `soundtracks`, `ratings`, `wikidata` and `showtimes` for movies and TV shows, plus the matching `append_to_response` values, `kinopoisk_id` in `external_ids` and `kinopoisk_id` as an `external_source` for `find`.
+- The OMDb compatible route at `/omdb/` with the parameters `i`, `t`, `s`, `type`, `y`, `plot`, `page` and `r`.
 - Images at `https://img.amodb.dev/t/p/{size}/{file}`.
 - The public `GET /plans` endpoint.
 
-TMDB write methods (account, session, rating and list writes) are not offered. They return 405 with code 37.
+Parameters are listed per operation and match what the server reads. For example, `append_to_response` has its own list of names for movies, TV shows, people, seasons and episodes, and `language` appears only where it changes the response. Response schemas and examples come from live responses of the API server. The `/plans` example is the one exception and shows illustrative values.
+
+## Routes that are not offered
+
+TMDB write methods and account routes return 405 with code 37 and the message "This method is not offered by amodb.". That covers everything under `account`, `authentication`, `guest_session` and `list`, and any path that ends in `/account_states` or `/rating`.
+
+These TMDB routes return 404 with code 34, as does any other unknown path:
+
+- `aggregate_credits` of movies, shows and seasons
+- `changes` of movies, shows and people
+- `/person/{id}/translations`, `/person/latest` and `/person/{id}/tagged_images`
+- `/credit/{credit_id}`, `/review/{review_id}` and `/tv/episode_group/{id}`
+- `images`, `translations` and `alternative_names` of collections, companies and networks
+- `/tv/{id}/screened_theatrically` and `/configuration/timezones`
+
+`include_adult` is ignored. Adult titles and people are never served.
+
+The OMDb route returns errors as HTTP 200 with `{"Response":"False","Error":"..."}`. Only `r=json` is supported, any other `r` returns 400. Episodes and seasons are not offered.
 
 ## Base URL and auth
 
