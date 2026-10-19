@@ -7,10 +7,10 @@
   "homepage": "https://amodb.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amodb-dev/amodb-openapi.git"
+    "url": "git+https://github.com/AmoDataBase/amodb-openapi.git"
   },
   "bugs": {
-    "url": "https://github.com/amodb-dev/amodb-openapi/issues"
+    "url": "https://github.com/AmoDataBase/amodb-openapi/issues"
   },
   "keywords": [
     "amodb",

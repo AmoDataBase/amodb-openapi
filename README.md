@@ -1,8 +1,8 @@
 <p align="center">
   <a href="https://amodb.dev">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/amodb-dev/.github/main/assets/lockup-dark.png">
-      <img src="https://raw.githubusercontent.com/amodb-dev/.github/main/assets/lockup-light.png" alt="amodb" width="260">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AmoDataBase/.github/main/assets/lockup-dark.png">
+      <img src="https://raw.githubusercontent.com/AmoDataBase/.github/main/assets/lockup-light.png" alt="amodb" width="260">
     </picture>
   </a>
 </p>
@@ -12,9 +12,9 @@
 <p align="center">OpenAPI 3.1 specification of the amodb API with Postman and Insomnia collections.</p>
 
 <p align="center">
-  <a href="https://github.com/amodb-dev/amodb-openapi/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/amodb-dev/amodb-openapi/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="https://github.com/amodb-dev/amodb-openapi/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/amodb-dev/amodb-openapi"></a>
-  <a href="https://github.com/amodb-dev/amodb-openapi/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/amodb-dev/amodb-openapi"></a>
+  <a href="https://github.com/AmoDataBase/amodb-openapi/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/AmoDataBase/amodb-openapi/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/AmoDataBase/amodb-openapi/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/AmoDataBase/amodb-openapi"></a>
+  <a href="https://github.com/AmoDataBase/amodb-openapi/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/AmoDataBase/amodb-openapi"></a>
 </p>
 
 OpenAPI 3.1 specification of the amodb API, with ready to import Postman and Insomnia collections.
@@ -60,10 +60,10 @@ The OMDb route returns errors as HTTP 200 with `{"Response":"False","Error":"...
 
 ## Install
 
-Download `openapi.yaml`, `postman_collection.json` and `insomnia_export.json` from the [latest release](https://github.com/amodb-dev/amodb-openapi/releases), or clone the repository:
+Download `openapi.yaml`, `postman_collection.json` and `insomnia_export.json` from the [latest release](https://github.com/AmoDataBase/amodb-openapi/releases), or clone the repository:
 
 ```sh
-git clone https://github.com/amodb-dev/amodb-openapi
+git clone https://github.com/AmoDataBase/amodb-openapi
 cd amodb-openapi
 npm install
 ```
@@ -155,10 +155,10 @@ npm run check
 - Docs: https://amodb.dev/docs
 - Pricing: https://amodb.dev/pricing
 - Status: https://amodb.dev/status
-- Issues: https://github.com/amodb-dev/amodb-openapi/issues
-- Changelog: https://github.com/amodb-dev/amodb-openapi/blob/main/CHANGELOG.md
-- Security: https://github.com/amodb-dev/amodb-openapi/blob/main/SECURITY.md
-- Organization: https://github.com/amodb-dev
+- Issues: https://github.com/AmoDataBase/amodb-openapi/issues
+- Changelog: https://github.com/AmoDataBase/amodb-openapi/blob/main/CHANGELOG.md
+- Security: https://github.com/AmoDataBase/amodb-openapi/blob/main/SECURITY.md
+- Organization: https://github.com/AmoDataBase
 
 ## License
 

@@ -18,7 +18,7 @@ Aligns the document with the live API server: 99 paths, 99 operations and 23 tag
 - The introduction, tag descriptions and README list the TMDB routes that answer 405 and 404.
 - Rebuilt `postman_collection.json` and `insomnia_export.json`.
 - Add CI, release and Dependabot workflows.
-- Repository and package URLs now point to the amodb-dev organization.
+- Repository and package URLs now point to the AmoDataBase organization.
 
 ## 0.1.0 - 2026-10-18
 
